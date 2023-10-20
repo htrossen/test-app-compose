@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Cocktails</string>
+    <!--    Home Page-->
+    <string name="find_next_cocktail">Find your next cocktail!</string>
+    <string name="search_by_liquor">Search by Liquor</string>
+
+    <!--    Ingredient Detail Page-->
+    <string name="type_cocktails">%s Cocktails</string>
+    <string name="view_all">View All</string>
+    <string name="what_is">What is %s?</string>
+
+    <!--    Cocktail Detail Page-->
+    <string name="glass_type">Glass: %s</string>
+    <string name="ingredients">Instructions</string>
+    <string name="instructions">Instructions</string>
+</resources>
