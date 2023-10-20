@@ -14,7 +14,7 @@ import com.example.testappcompose.ui.theme.TestAppComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class OneActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -28,6 +28,9 @@ class MainActivity : ComponentActivity() {
                     NavHost(navController, startDestination = "list") {
                         composable("list") {
                             HomePage(
+                                navToSearchResults = { search ->
+                                    navController.navigate(route = "cocktails/$search")
+                                },
                                 navToIngredientDetails = { ingredientId ->
                                     navController.navigate(route = "ingredientDetails/$ingredientId")
                                 }
@@ -46,10 +49,10 @@ class MainActivity : ComponentActivity() {
                                 navBack = { navController.popBackStack() }
                             )
                         }
-                        composable("cocktails/{ingredientName}") { backStackEntry ->
-                            val ingredientName = backStackEntry.arguments?.getString("ingredientName")
+                        composable("cocktails/{searchName}") { backStackEntry ->
+                            val searchName = backStackEntry.arguments?.getString("searchName")
                             CocktailsPage(
-                                ingredientName = ingredientName,
+                                searchName = searchName,
                                 navToCocktailDetails = { cocktailId ->
                                     navController.navigate(route = "cocktailDetails/$cocktailId")
                                 },

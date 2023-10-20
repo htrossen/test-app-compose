@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +31,7 @@ import com.example.testappcompose.common.LoadingState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CocktailsPage(
-    ingredientName: String?,
+    searchName: String?,
     navToCocktailDetails: (String) -> Unit,
     navBack: () -> Unit
 ) {
@@ -38,16 +39,18 @@ fun CocktailsPage(
 
     val viewState by viewModel.viewState
 
-    ingredientName?.let {
-        viewModel.loadData(ingredientName)
-    } ?: run {
-        viewModel.viewState.value = CocktailsViewState.Error("ingredientName null.")
+    LaunchedEffect(Unit) {
+        searchName?.let {
+            viewModel.loadData(searchName)
+        } ?: run {
+            viewModel.viewState.value = CocktailsViewState.Error("searchName null.")
+        }
     }
 
     AnimatedContent(
         targetState = viewState,
         transitionSpec = { fadeIn() togetherWith fadeOut() },
-        label = "Ingredient Detail Page"
+        label = "Cocktails List Page"
     ) { state ->
         when (state) {
             is CocktailsViewState.Loading -> LoadingState(
@@ -75,7 +78,7 @@ fun CocktailsPage(
                                 modifier = Modifier.padding(top = 12.dp, bottom = 8.dp),
                                 text = stringResource(
                                     id = R.string.type_cocktails,
-                                    ingredientName.orEmpty()
+                                    searchName.orEmpty()
                                 ),
                                 color = MaterialTheme.colorScheme.onSurface,
                                 style = MaterialTheme.typography.headlineSmall

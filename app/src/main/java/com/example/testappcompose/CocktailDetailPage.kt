@@ -19,6 +19,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,10 +43,12 @@ fun CocktailDetailPage(
 
     val viewState by viewModel.viewState
 
-    cocktailId?.let {
-        viewModel.loadData(cocktailId)
-    } ?: run {
-        viewModel.viewState.value = CocktailDetailsViewState.Error("cocktailId null.")
+    LaunchedEffect(Unit) {
+        cocktailId?.let {
+            viewModel.loadData(cocktailId)
+        } ?: run {
+            viewModel.viewState.value = CocktailDetailsViewState.Error("cocktailId null.")
+        }
     }
 
     Box {

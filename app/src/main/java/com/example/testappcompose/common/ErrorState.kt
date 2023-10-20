@@ -35,8 +35,9 @@ fun ErrorState(
 
     val spilledDrinkUrl = "https://img.freepik.com/premium-photo/spilled-cocktail-overturned-glass_762026-79695.jpg"
 
-    Box(modifier = modifier) {
+    Box {
         Column(
+            modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {

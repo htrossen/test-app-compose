@@ -11,12 +11,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TestAppCompose"
+        android:theme="@style/Theme.CocktailApp"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".OneActivity"
             android:exported="true"
-            android:theme="@style/Theme.TestAppCompose">
+            android:theme="@style/Theme.CocktailApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -19,6 +19,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,10 +49,12 @@ fun IngredientDetailPage(
 
     val viewState by viewModel.viewState
 
-    ingredientName?.let {
-        viewModel.loadData(ingredientName)
-    } ?: run {
-        viewModel.viewState.value = IngredientDetailViewState.Error("ingredientName null.")
+    LaunchedEffect(Unit) {
+        ingredientName?.let {
+            viewModel.loadData(ingredientName)
+        } ?: run {
+            viewModel.viewState.value = IngredientDetailViewState.Error("ingredientName null.")
+        }
     }
 
     Box {

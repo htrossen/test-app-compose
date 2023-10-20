@@ -5,14 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testappcompose.common.CarouselItem
 import com.example.testappcompose.core.extension.netDiagnostics
-import com.example.testappcompose.core.service.TestService
+import com.example.testappcompose.core.service.CocktailService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class IngredientDetailViewModel @Inject constructor(
-    private val testService: TestService
+    private val cocktailService: CocktailService
 ) : ViewModel() {
 
     val viewState = mutableStateOf<IngredientDetailViewState>(IngredientDetailViewState.Loading)
@@ -29,7 +29,7 @@ class IngredientDetailViewModel @Inject constructor(
         var diagnostics: String? = null
         viewModelScope.launch {
             launch {
-                testService.getCocktailIngredient(ingredientName).onSuccess {
+                cocktailService.getCocktailIngredient(ingredientName).onSuccess {
                     abv = it.abv
                     description = it.description
                 }.onFailure {
@@ -37,7 +37,7 @@ class IngredientDetailViewModel @Inject constructor(
                 }
             }
             launch {
-                testService.getCocktailsByIngredient(ingredientName).onSuccess {
+                cocktailService.getCocktailsBySearchName(ingredientName).onSuccess {
                     if (it.isNotEmpty()) {
                         cocktails = it
                     } else diagnostics += "Cocktails list for $ingredientName was empty."

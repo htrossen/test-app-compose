@@ -52,6 +52,6 @@ internal object NetModule {
 
     @Provides
     @Singleton
-    fun provideTestApi(@Named("testRetrofit") retrofit: Retrofit): TestApi =
-        retrofit.create(TestApi::class.java)
+    fun provideTestApi(@Named("testRetrofit") retrofit: Retrofit): CocktailApi =
+        retrofit.create(CocktailApi::class.java)
 }
