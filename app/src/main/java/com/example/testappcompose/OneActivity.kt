@@ -10,6 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.testappcompose.screens.CocktailDetailPage
+import com.example.testappcompose.screens.CocktailsPage
+import com.example.testappcompose.screens.FavoritesPage
+import com.example.testappcompose.screens.HomePage
+import com.example.testappcompose.screens.IngredientDetailPage
 import com.example.testappcompose.ui.theme.TestAppComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,15 +30,26 @@ class OneActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController, startDestination = "list") {
-                        composable("list") {
+                    NavHost(navController, startDestination = "home") {
+                        composable("home") {
                             HomePage(
                                 navToSearchResults = { search ->
                                     navController.navigate(route = "cocktails/$search")
                                 },
+                                navToFavorites = {
+                                    navController.navigate(route = "favorites")
+                                },
                                 navToIngredientDetails = { ingredientId ->
                                     navController.navigate(route = "ingredientDetails/$ingredientId")
                                 }
+                            )
+                        }
+                        composable("favorites") {
+                            FavoritesPage(
+                                navToCocktailDetails = { cocktailId ->
+                                    navController.navigate(route = "cocktailDetails/$cocktailId")
+                                },
+                                navBack = { navController.popBackStack() }
                             )
                         }
                         composable("ingredientDetails/{ingredientName}") { backStackEntry ->

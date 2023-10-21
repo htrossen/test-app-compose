@@ -19,21 +19,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.testappcompose.BuildConfig
+import com.example.testappcompose.R
 
 // TODO: Add retry button
 
 @Composable
-fun ErrorState(
+fun ProblemState(
     modifier: Modifier,
     netDiagnostics: String,
+    imageUrl: String = "https://img.freepik.com/premium-photo/spilled-cocktail-overturned-glass_762026-79695.jpg",
+    primaryTextResId: Int = R.string.error_text_primary,
+    secondaryTextResId: Int = R.string.error_text_secondary,
     navBack: (() -> Unit)? = null
 ) {
     var showAlertDialog by remember { mutableStateOf(false) }
-
-    val spilledDrinkUrl = "https://img.freepik.com/premium-photo/spilled-cocktail-overturned-glass_762026-79695.jpg"
 
     Box {
         Column(
@@ -48,22 +51,23 @@ fun ErrorState(
                     .padding(16.dp)
                     .clip(RoundedCornerShape(6.dp))
                     .clickable(enabled = BuildConfig.DEBUG) { showAlertDialog = true },
-                url = spilledDrinkUrl
+                url = imageUrl
             )
             Text(
-                text = "Oops, looks like we had a little too much fun!",
+                text = stringResource(id = primaryTextResId),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.titleLarge,
             )
             Text(
-                text = "Please bare with us while we clean up our mess.",
+                modifier = Modifier.padding(horizontal = 16.dp),
+                text = stringResource(id = secondaryTextResId),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
 
         navBack?.let {
-            BackButton(onBack = it)
+            FloatingBackButton(onBack = it)
         }
     }
 

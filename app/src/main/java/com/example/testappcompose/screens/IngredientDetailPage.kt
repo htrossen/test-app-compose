@@ -1,4 +1,4 @@
-package com.example.testappcompose
+package com.example.testappcompose.screens
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -31,8 +31,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.testappcompose.common.BackButton
-import com.example.testappcompose.common.ErrorState
+import com.example.testappcompose.R
+import com.example.testappcompose.common.FloatingBackButton
+import com.example.testappcompose.common.ProblemState
 import com.example.testappcompose.common.GlideImageWrapper
 import com.example.testappcompose.common.HorizontalCarousel
 import com.example.testappcompose.common.LoadingState
@@ -65,7 +66,7 @@ fun IngredientDetailPage(
         ) { state ->
             when (state) {
                 is IngredientDetailViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
-                is IngredientDetailViewState.Error -> ErrorState(
+                is IngredientDetailViewState.Error -> ProblemState(
                     modifier = Modifier.fillMaxSize(),
                     netDiagnostics = state.netDiagnostic
                 )
@@ -171,6 +172,6 @@ fun IngredientDetailPage(
                 }
             }
         }
-        BackButton(onBack = navBack)
+        FloatingBackButton(onBack = navBack)
     }
 }

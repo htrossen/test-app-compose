@@ -21,6 +21,30 @@ import com.example.testappcompose.R
 
 @Composable
 fun BackButton(
+    modifier: Modifier = Modifier,
+    backIconResource: Int = R.drawable.arrow_back,
+    onBack: () -> Unit
+) {
+    val focusRequester = remember { FocusRequester() }
+
+    Icon(
+        painter = painterResource(backIconResource),
+        contentDescription = "Navigate Up",
+        tint = MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier
+            .focusRequester(focusRequester)
+            .then(modifier)
+            .padding(8.dp)
+            .clickable { onBack() }
+    )
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+}
+
+@Composable
+fun FloatingBackButton(
     modifier: Modifier = Modifier.statusBarsPadding().padding(top = 8.dp, start = 8.dp),
     backIconResource: Int = R.drawable.arrow_back,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,

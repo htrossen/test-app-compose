@@ -1,4 +1,4 @@
-package com.example.testappcompose
+package com.example.testappcompose.screens
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -22,7 +22,8 @@ class CocktailsViewModel @Inject constructor(
             if (it.isNotEmpty()) {
                 viewState.value = CocktailsViewState.Loaded(cocktails = it)
             } else {
-                viewState.value = CocktailsViewState.Error("Cocktails list for $searchName was empty.")
+                viewState.value =
+                    CocktailsViewState.Error("Cocktails list for $searchName was empty.")
             }
         }.onFailure {
             viewState.value = CocktailsViewState.Error(it.netDiagnostics())

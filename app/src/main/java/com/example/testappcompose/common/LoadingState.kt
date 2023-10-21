@@ -14,7 +14,7 @@ fun LoadingState(
     Box(modifier = modifier) {
         CircularProgressIndicator(Modifier.align(Alignment.Center))
         navBack?.let {
-            BackButton(onBack = it)
+            FloatingBackButton(onBack = it)
         }
     }
 }

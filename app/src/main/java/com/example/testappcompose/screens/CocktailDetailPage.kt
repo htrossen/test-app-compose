@@ -1,9 +1,10 @@
-package com.example.testappcompose
+package com.example.testappcompose.screens
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,15 +26,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.testappcompose.common.BackButton
-import com.example.testappcompose.common.ErrorState
+import com.example.testappcompose.R
+import com.example.testappcompose.common.FloatingBackButton
 import com.example.testappcompose.common.GlideImageWrapper
 import com.example.testappcompose.common.LoadingState
+import com.example.testappcompose.common.ProblemState
 
 @Composable
 fun CocktailDetailPage(
@@ -59,7 +63,7 @@ fun CocktailDetailPage(
         ) { state ->
             when (state) {
                 is CocktailDetailsViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
-                is CocktailDetailsViewState.Error -> ErrorState(
+                is CocktailDetailsViewState.Error -> ProblemState(
                     modifier = Modifier.fillMaxSize(),
                     netDiagnostics = state.netDiagnostic
                 )
@@ -85,17 +89,46 @@ fun CocktailDetailPage(
                             )
                         }
 
-                        Column {
-                            Text(
-                                text = cocktail.name,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.headlineLarge
-                            )
-                            Text(
-                                text = stringResource(id = R.string.glass_type, cocktail.glass),
-                                color = MaterialTheme.colorScheme.onSurface,
-                                style = MaterialTheme.typography.titleMedium
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalAlignment = Alignment.Bottom
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = cocktail.name,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.headlineLarge
+                                )
+                                Text(
+                                    text = stringResource(id = R.string.glass_type, cocktail.glass),
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                            }
+
+                            val favorite by viewModel.favorite
+                            Icon(
+                                modifier = Modifier
+                                    .size(56.dp)
+                                    .clip(RoundedCornerShape(6.dp))
+                                    .clickable {
+                                        cocktailId?.let {
+                                            viewModel.saveOrRemoveAsFavorite(it, cocktail)
+                                        }
+                                    }
+                                    .padding(8.dp),
+                                painter = painterResource(
+                                    id = if (favorite) {
+                                        R.drawable.favorite_filled
+                                    } else R.drawable.favorite_unfilled
+                                ),
+                                tint = MaterialTheme.colorScheme.primary,
+                                contentDescription = stringResource(
+                                    id = if (favorite) {
+                                        R.string.remove_from_favorites
+                                    } else R.string.add_to_favorites
+                                )
                             )
                         }
 
@@ -137,6 +170,6 @@ fun CocktailDetailPage(
                 }
             }
         }
-        BackButton(onBack = navBack)
+        FloatingBackButton(onBack = navBack)
     }
 }

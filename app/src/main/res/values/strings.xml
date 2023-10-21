@@ -7,6 +7,11 @@
     <string name="find_next_cocktail">Find your next cocktail!</string>
     <string name="search_by_liquor">Search by Liquor</string>
 
+    <!--    Favorites-->
+    <string name="favorites">Favorites</string>
+    <string name="empty_fav_text_primary">Looks like you don\'t have any Favorites.</string>
+    <string name="empty_fav_text_secondary">Click the heart icon on any Cocktail Details and find it saved here for later.</string>
+
     <!--    Ingredient Detail Page-->
     <string name="type_cocktails">%s Cocktails</string>
     <string name="view_all">View All</string>
@@ -14,6 +19,12 @@
 
     <!--    Cocktail Detail Page-->
     <string name="glass_type">Glass: %s</string>
+    <string name="add_to_favorites">Add to Favorites</string>
+    <string name="remove_from_favorites">Remove from Favorites</string>
     <string name="ingredients">Instructions</string>
     <string name="instructions">Instructions</string>
+
+    <!--    Common-->
+    <string name="error_text_primary">Oops, looks like we had too much fun!</string>
+    <string name="error_text_secondary">Please bare with us while we clean up our mess.</string>
 </resources>

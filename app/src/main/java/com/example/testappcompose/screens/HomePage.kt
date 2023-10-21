@@ -1,4 +1,4 @@
-package com.example.testappcompose
+package com.example.testappcompose.screens
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,6 +47,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.testappcompose.R
 import com.example.testappcompose.common.GlideImageWrapper
 import com.example.testappcompose.common.HorizontalCarousel
 import com.example.testappcompose.common.LoadingState
@@ -55,6 +57,7 @@ import com.example.testappcompose.core.extension.titleCase
 @Composable
 fun HomePage(
     navToSearchResults: (String) -> Unit,
+    navToFavorites: () -> Unit,
     navToIngredientDetails: (String) -> Unit
 ) {
     val viewModel: HomeViewModel = viewModel()
@@ -89,9 +92,9 @@ fun HomePage(
                         },
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(id = R.drawable.baseline_search),
+                                painter = painterResource(id = R.drawable.search),
                                 tint = MaterialTheme.colorScheme.background,
-                                contentDescription = null
+                                contentDescription = stringResource(id = R.string.search)
                             )
                         },
                         placeholder = {
@@ -141,6 +144,17 @@ fun HomePage(
                             text = stringResource(id = R.string.cancel),
                             color = color,
                             style = MaterialTheme.typography.labelLarge,
+                        )
+                    } else {
+                        Icon(
+                            modifier = Modifier
+                                .padding(end = 4.dp)
+                                .clip(RoundedCornerShape(6.dp))
+                                .clickable { navToFavorites() }
+                                .padding(8.dp),
+                            painter = painterResource(id = R.drawable.favorite_filled),
+                            tint = MaterialTheme.colorScheme.background,
+                            contentDescription = stringResource(id = R.string.favorites)
                         )
                     }
                 }

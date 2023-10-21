@@ -1,34 +1,30 @@
-package com.example.testappcompose
+package com.example.testappcompose.screens
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.Scaffold
+import androidx.compose.material.TopAppBar
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.testappcompose.R
 import com.example.testappcompose.common.BackButton
-import com.example.testappcompose.common.ErrorState
 import com.example.testappcompose.common.GridView
 import com.example.testappcompose.common.LoadingState
+import com.example.testappcompose.common.ProblemState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CocktailsPage(
     searchName: String?,
@@ -57,7 +53,7 @@ fun CocktailsPage(
                 modifier = Modifier.fillMaxSize(),
                 navBack = navBack
             )
-            is CocktailsViewState.Error -> ErrorState(
+            is CocktailsViewState.Error -> ProblemState(
                 modifier = Modifier.fillMaxSize(),
                 netDiagnostics = state.netDiagnostic,
                 navBack = navBack
@@ -65,29 +61,31 @@ fun CocktailsPage(
             is CocktailsViewState.Loaded -> {
                 Scaffold(
                     topBar = {
-                        Row(
+                        TopAppBar(
                             modifier = Modifier
-                                .background(color = MaterialTheme.colorScheme.surface)
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            BackButton(onBack = navBack)
-
-                            Text(
-                                modifier = Modifier.padding(top = 12.dp, bottom = 8.dp),
-                                text = stringResource(
-                                    id = R.string.type_cocktails,
-                                    searchName.orEmpty()
-                                ),
-                                color = MaterialTheme.colorScheme.onSurface,
-                                style = MaterialTheme.typography.headlineSmall
-                            )
-                        }
+                                .background(color = MaterialTheme.colorScheme.primary),
+                            backgroundColor = MaterialTheme.colorScheme.primary,
+                            title = {
+                                Text(
+                                    text = stringResource(
+                                        id = R.string.type_cocktails,
+                                        searchName.orEmpty()
+                                    ),
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    style = MaterialTheme.typography.headlineSmall
+                                )
+                            },
+                            navigationIcon = {
+                                BackButton(onBack = navBack)
+                            }
+                        )
                     }
                 ) { paddingValues ->
                     GridView(
-                        modifier = Modifier.padding(paddingValues),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.background)
+                            .padding(paddingValues),
                         imageModifier = Modifier
                             .background(MaterialTheme.colorScheme.surface)
                             .size(200.dp),

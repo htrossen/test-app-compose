@@ -1,4 +1,4 @@
-package com.example.testappcompose
+package com.example.testappcompose.screens
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
