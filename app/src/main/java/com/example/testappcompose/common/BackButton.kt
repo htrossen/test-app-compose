@@ -6,12 +6,14 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -34,8 +36,9 @@ fun BackButton(
         modifier = Modifier
             .focusRequester(focusRequester)
             .then(modifier)
-            .padding(8.dp)
+            .clip(RoundedCornerShape(6.dp))
             .clickable { onBack() }
+            .padding(8.dp)
     )
 
     LaunchedEffect(Unit) {
@@ -60,11 +63,11 @@ fun FloatingBackButton(
             .focusRequester(focusRequester)
             .then(modifier)
             .background(color = backgroundColor, shape = CircleShape)
-            .padding(8.dp)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
             ) { onBack() }
+            .padding(8.dp)
     )
 
     LaunchedEffect(Unit) {
