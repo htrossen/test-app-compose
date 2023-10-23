@@ -64,7 +64,7 @@ fun HomePage(
 
     val viewState by viewModel.viewState
 
-    val homeImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSutMvXbMT3BPFL24wuSe2cQZeM6SYk1D8Pobj2seXkUKNob1Y0RtbzN7tA_i7bjNDCA90&usqp=CAU"
+    val homeImageUrl = "https://img.freepik.com/free-photo/fresh-cocktails-with-ice-lemon-lime-fruits-generative-ai_188544-12370.jpg?size=626&ext=jpg&ga=GA1.1.386372595.1697932800&semt=sph"
     Scaffold(
         topBar = {
             var searchText by remember { mutableStateOf(TextFieldValue()) }
