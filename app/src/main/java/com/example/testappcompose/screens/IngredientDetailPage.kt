@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,10 +33,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.testappcompose.R
 import com.example.testappcompose.common.FloatingBackButton
-import com.example.testappcompose.common.ProblemState
 import com.example.testappcompose.common.GlideImageWrapper
 import com.example.testappcompose.common.HorizontalCarousel
 import com.example.testappcompose.common.LoadingState
+import com.example.testappcompose.common.ProblemState
 import com.example.testappcompose.core.extension.clickableWithPressedListener
 
 @Composable
@@ -107,7 +107,7 @@ fun IngredientDetailPage(
                             }
                         }
 
-                        Divider(color = MaterialTheme.colorScheme.primary)
+                        HorizontalDivider(color = MaterialTheme.colorScheme.primary)
 
                         Row(
                             modifier = Modifier

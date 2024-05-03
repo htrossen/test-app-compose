@@ -8,7 +8,7 @@ import kotlin.String
 fun String.sentenceCase(): String = lowercase().replaceFirstChar(Char::uppercase)
 
 /**
- * Capitalize the each work of a string
+ * Capitalize the each word of a string
  */
 fun String.titleCase(): String = lowercase().split(" ").joinToString(separator = " ") {
     it.replaceFirstChar(Char::uppercase)

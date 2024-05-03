@@ -19,14 +19,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.TopAppBar
-import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +56,7 @@ import com.example.testappcompose.common.LoadingState
 import com.example.testappcompose.core.extension.clickableWithPressedListener
 import com.example.testappcompose.core.extension.titleCase
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(
     navToSearchResults: (String) -> Unit,
@@ -76,7 +79,9 @@ fun HomePage(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = MaterialTheme.colorScheme.primary),
-                backgroundColor = MaterialTheme.colorScheme.primary,
+                colors =  TopAppBarDefaults.topAppBarColors().copy(
+                    containerColor =  MaterialTheme.colorScheme.primary,
+                ),
                 title = {
                     TextField(
                         modifier = Modifier
@@ -100,6 +105,7 @@ fun HomePage(
                         placeholder = {
                             Text(
                                 text = stringResource(id = R.string.search_placeholder),
+                                color = MaterialTheme.colorScheme.background.copy(.8f),
                                 style = MaterialTheme.typography.labelLarge,
                             )
                         },
@@ -115,8 +121,11 @@ fun HomePage(
                             }
                         ),
                         shape = CircleShape,
-                        colors = TextFieldDefaults.textFieldColors(
-                            backgroundColor = MaterialTheme.colorScheme.primary,
+                        colors = TextFieldDefaults.colors().copy(
+                            focusedContainerColor = MaterialTheme.colorScheme.primary,
+                            unfocusedContainerColor = MaterialTheme.colorScheme.primary,
+                            focusedTextColor = MaterialTheme.colorScheme.background,
+                            unfocusedTextColor = MaterialTheme.colorScheme.background,
                             cursorColor = MaterialTheme.colorScheme.background,
                             focusedIndicatorColor = Color.Transparent,
                             unfocusedIndicatorColor = Color.Transparent,
@@ -185,7 +194,7 @@ fun HomePage(
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.headlineLarge,
             )
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier.padding(vertical = 16.dp),
                 color = MaterialTheme.colorScheme.primary
             )

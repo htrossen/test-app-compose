@@ -6,7 +6,7 @@ import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp
-class OneApp: Application() {
+class OneApp : Application() {
     @Inject
     lateinit var flipperInitializer: FlipperInitializer
 
