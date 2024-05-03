@@ -68,7 +68,10 @@ fun IngredientDetailPage(
                 is IngredientDetailViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
                 is IngredientDetailViewState.Error -> ProblemState(
                     modifier = Modifier.fillMaxSize(),
-                    netDiagnostics = state.netDiagnostic
+                    netDiagnostics = state.netDiagnostic,
+                    retry = if (ingredientName != null) {
+                        { viewModel.loadData(ingredientName) }
+                    } else null
                 )
                 is IngredientDetailViewState.Loaded -> {
                     Column(

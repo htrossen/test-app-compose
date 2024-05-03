@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,12 +21,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.testappcompose.BuildConfig
 import com.example.testappcompose.R
-
-// TODO: Add retry button
 
 @Composable
 fun ProblemState(
@@ -34,7 +34,8 @@ fun ProblemState(
     imageUrl: String = "https://img.freepik.com/premium-photo/spilled-cocktail-overturned-glass_762026-79695.jpg",
     primaryTextResId: Int = R.string.error_text_primary,
     secondaryTextResId: Int = R.string.error_text_secondary,
-    navBack: (() -> Unit)? = null
+    navBack: (() -> Unit)? = null,
+    retry: (() -> Unit)? = null,
 ) {
     var showAlertDialog by remember { mutableStateOf(false) }
 
@@ -64,6 +65,18 @@ fun ProblemState(
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
             )
+
+            retry?.let {
+                Button(
+                    modifier = Modifier.padding(16.dp),
+                    onClick = retry
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.error_text_retry),
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+            }
         }
 
         navBack?.let {

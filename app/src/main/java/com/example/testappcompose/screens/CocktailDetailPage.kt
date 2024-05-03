@@ -65,7 +65,10 @@ fun CocktailDetailPage(
                 is CocktailDetailsViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
                 is CocktailDetailsViewState.Error -> ProblemState(
                     modifier = Modifier.fillMaxSize(),
-                    netDiagnostics = state.netDiagnostic
+                    netDiagnostics = state.netDiagnostic,
+                    retry = if (cocktailId != null) {
+                        { viewModel.loadData(cocktailId) }
+                    } else null
                 )
                 is CocktailDetailsViewState.Loaded -> {
                     val cocktail = state.cocktail

@@ -27,4 +27,5 @@
     <!--    Common-->
     <string name="error_text_primary">Oops, looks like we had too much fun!</string>
     <string name="error_text_secondary">Please bear with us while we clean up our mess.</string>
+    <string name="error_text_retry">Reload Page</string>
 </resources>

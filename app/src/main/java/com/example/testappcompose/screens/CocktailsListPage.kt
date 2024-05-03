@@ -59,7 +59,10 @@ fun CocktailsPage(
             is CocktailsViewState.Error -> ProblemState(
                 modifier = Modifier.fillMaxSize(),
                 netDiagnostics = state.netDiagnostic,
-                navBack = navBack
+                navBack = navBack,
+                retry = if (searchName != null) {
+                    { viewModel.loadData(searchName) }
+                } else null
             )
             is CocktailsViewState.Loaded -> {
                 Scaffold(
