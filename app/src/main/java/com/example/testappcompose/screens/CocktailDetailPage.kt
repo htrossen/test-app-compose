@@ -1,5 +1,6 @@
 package com.example.testappcompose.screens
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -26,11 +27,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.testappcompose.R
 import com.example.testappcompose.common.FloatingBackButton
@@ -46,6 +49,8 @@ fun CocktailDetailPage(
     val viewModel: CocktailDetailViewModel = hiltViewModel()
 
     val viewState by viewModel.viewState
+
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         cocktailId?.let {
@@ -110,6 +115,7 @@ fun CocktailDetailPage(
                                 )
                             }
 
+                            // Favorite
                             val favorite by viewModel.favorite
                             Icon(
                                 modifier = Modifier
@@ -132,6 +138,47 @@ fun CocktailDetailPage(
                                         R.string.remove_from_favorites
                                     } else R.string.add_to_favorites
                                 )
+                            )
+
+                            // Share
+                            Icon(
+                                modifier = Modifier
+                                    .size(56.dp)
+                                    .clip(RoundedCornerShape(6.dp))
+                                    .clickable {
+                                        cocktailId?.let {
+                                            val title = context.getString(
+                                                R.string.share_title,
+                                                cocktail.name
+                                            )
+                                            val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                                                putExtra(Intent.EXTRA_TITLE, title)
+                                                putExtra(
+                                                    Intent.EXTRA_TEXT,
+                                                    context.getString(
+                                                        R.string.share_ingredients_instructions,
+                                                        title,
+                                                        cocktail.ingredients.joinToString("\n") {
+                                                            "${it.amount} ${it.name}"
+                                                        },
+                                                        cocktail.instructions
+                                                    )
+                                                )
+                                                type = "text/plain"
+                                            }
+                                            val shareIntent = Intent.createChooser(
+                                                sendIntent,
+                                                context.getString(
+                                                    R.string.share_recipe
+                                                )
+                                            )
+                                            ContextCompat.startActivity(context, shareIntent, null)
+                                        }
+                                    }
+                                    .padding(8.dp),
+                                painter = painterResource(id = R.drawable.share),
+                                tint = MaterialTheme.colorScheme.primary,
+                                contentDescription = stringResource(id = R.string.share_recipe)
                             )
                         }
 
