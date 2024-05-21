@@ -54,7 +54,7 @@ fun IngredientDetailPage(
         ingredientName?.let {
             viewModel.loadData(ingredientName)
         } ?: run {
-            viewModel.viewState.value = IngredientDetailViewState.Error("ingredientName null.")
+            viewModel.viewState.value = ViewState.Error("ingredientName null.")
         }
     }
 
@@ -65,15 +65,16 @@ fun IngredientDetailPage(
             label = "Ingredient Detail Page"
         ) { state ->
             when (state) {
-                is IngredientDetailViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
-                is IngredientDetailViewState.Error -> ProblemState(
+                is ViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
+                is ViewState.Empty -> {} // NO-OP
+                is ViewState.Error -> ProblemState(
                     modifier = Modifier.fillMaxSize(),
                     netDiagnostics = state.netDiagnostic,
                     retry = if (ingredientName != null) {
                         { viewModel.loadData(ingredientName) }
                     } else null
                 )
-                is IngredientDetailViewState.Loaded -> {
+                is ViewState.Loaded -> {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -90,17 +91,17 @@ fun IngredientDetailPage(
                             GlideImageWrapper(
                                 modifier = Modifier
                                     .size(200.dp),
-                                url = state.image
+                                url = state.data.image
                             )
 
                             Column(modifier = Modifier.weight(.5f)) {
                                 Text(
-                                    text = state.name,
+                                    text = state.data.name,
                                     color = MaterialTheme.colorScheme.onSurface,
                                     fontWeight = FontWeight.Bold,
                                     style = MaterialTheme.typography.headlineLarge
                                 )
-                                state.abv?.let { abv ->
+                                state.data.abv?.let { abv ->
                                     Text(
                                         text = "$abv ABV",
                                         color = MaterialTheme.colorScheme.onSurface,
@@ -128,7 +129,7 @@ fun IngredientDetailPage(
                                 style = MaterialTheme.typography.headlineSmall,
                             )
 
-                            if (state.cocktails.size > 10) {
+                            if (state.data.cocktails.size > 10) {
                                 var pressed by remember { mutableStateOf(false) }
                                 val color = if (pressed) {
                                     MaterialTheme.colorScheme.tertiary
@@ -152,14 +153,14 @@ fun IngredientDetailPage(
                             imageModifier = Modifier
                                 .background(MaterialTheme.colorScheme.surface)
                                 .size(200.dp),
-                            components = state.cocktails.take(10),
+                            components = state.data.cocktails.take(10),
                             clickAction = { navToCocktailDetails(it) }
                         )
 
-                        state.description?.let { description ->
+                        state.data.description?.let { description ->
                             Text(
                                 modifier = Modifier.padding(horizontal = 16.dp),
-                                text = stringResource(id = R.string.what_is, state.name),
+                                text = stringResource(id = R.string.what_is, state.data.name),
                                 textAlign = TextAlign.Center,
                                 style = MaterialTheme.typography.headlineSmall,
                             )

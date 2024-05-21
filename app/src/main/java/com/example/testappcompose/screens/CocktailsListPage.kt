@@ -34,7 +34,7 @@ fun CocktailsPage(
     navToCocktailDetails: (String) -> Unit,
     navBack: () -> Unit
 ) {
-    val viewModel: CocktailsViewModel = hiltViewModel()
+    val viewModel: CocktailsListViewModel = hiltViewModel()
 
     val viewState by viewModel.viewState
 
@@ -42,7 +42,7 @@ fun CocktailsPage(
         searchName?.let {
             viewModel.loadData(searchName)
         } ?: run {
-            viewModel.viewState.value = CocktailsViewState.Error("searchName null.")
+            viewModel.viewState.value = ViewState.Error("searchName null.")
         }
     }
 
@@ -52,11 +52,12 @@ fun CocktailsPage(
         label = "Cocktails List Page"
     ) { state ->
         when (state) {
-            is CocktailsViewState.Loading -> LoadingState(
+            is ViewState.Loading -> LoadingState(
                 modifier = Modifier.fillMaxSize(),
                 navBack = navBack
             )
-            is CocktailsViewState.Error -> ProblemState(
+            is ViewState.Empty -> {} // NO-OP
+            is ViewState.Error -> ProblemState(
                 modifier = Modifier.fillMaxSize(),
                 netDiagnostics = state.netDiagnostic,
                 navBack = navBack,
@@ -64,7 +65,7 @@ fun CocktailsPage(
                     { viewModel.loadData(searchName) }
                 } else null
             )
-            is CocktailsViewState.Loaded -> {
+            is ViewState.Loaded -> {
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -97,7 +98,7 @@ fun CocktailsPage(
                         imageModifier = Modifier
                             .background(MaterialTheme.colorScheme.surface)
                             .size(200.dp),
-                        components = state.cocktails,
+                        components = state.data,
                         clickAction = { navToCocktailDetails(it) }
                     )
                 }

@@ -56,7 +56,7 @@ fun CocktailDetailPage(
         cocktailId?.let {
             viewModel.loadData(cocktailId)
         } ?: run {
-            viewModel.viewState.value = CocktailDetailsViewState.Error("cocktailId null.")
+            viewModel.viewState.value = ViewState.Error("cocktailId null.")
         }
     }
 
@@ -67,16 +67,17 @@ fun CocktailDetailPage(
             label = "Cocktail Detail Page"
         ) { state ->
             when (state) {
-                is CocktailDetailsViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
-                is CocktailDetailsViewState.Error -> ProblemState(
+                is ViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
+                is ViewState.Empty -> {} // NO-OP
+                is ViewState.Error -> ProblemState(
                     modifier = Modifier.fillMaxSize(),
                     netDiagnostics = state.netDiagnostic,
                     retry = if (cocktailId != null) {
                         { viewModel.loadData(cocktailId) }
                     } else null
                 )
-                is CocktailDetailsViewState.Loaded -> {
-                    val cocktail = state.cocktail
+                is ViewState.Loaded -> {
+                    val cocktail = state.data
                     Column(
                         modifier = Modifier
                             .fillMaxSize()

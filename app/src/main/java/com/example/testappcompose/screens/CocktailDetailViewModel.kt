@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.testappcompose.core.data.Favorite
 import com.example.testappcompose.core.extension.netDiagnostics
 import com.example.testappcompose.core.model.Cocktail
+import com.example.testappcompose.core.repo.PersonalizationRepo
 import com.example.testappcompose.core.service.CocktailService
-import com.example.testappcompose.repo.PersonalizationRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,7 +18,7 @@ class CocktailDetailViewModel @Inject constructor(
     private val personalizationRepo: PersonalizationRepo
 ) : ViewModel() {
 
-    val viewState = mutableStateOf<CocktailDetailsViewState>(CocktailDetailsViewState.Loading)
+    val viewState = mutableStateOf<ViewState<Cocktail>>(ViewState.Loading)
 
     val favorite = mutableStateOf(false)
 
@@ -26,13 +26,13 @@ class CocktailDetailViewModel @Inject constructor(
         viewModelScope.launch {
             cocktailService.getCocktailById(id).onSuccess {
                 if (it != null) {
-                    viewState.value = CocktailDetailsViewState.Loaded(cocktail = it)
+                    viewState.value = ViewState.Loaded(data = it)
                 } else {
                     viewState.value =
-                        CocktailDetailsViewState.Error("Cocktail info for $id was null.")
+                        ViewState.Error("Cocktail info for $id was null.")
                 }
             }.onFailure {
-                viewState.value = CocktailDetailsViewState.Error(it.netDiagnostics())
+                viewState.value = ViewState.Error(it.netDiagnostics())
             }
         }
         viewModelScope.launch {
@@ -52,11 +52,4 @@ class CocktailDetailViewModel @Inject constructor(
         }
         favorite.value = !favorite.value
     }
-}
-sealed class CocktailDetailsViewState {
-    object Loading : CocktailDetailsViewState()
-    data class Error(val netDiagnostic: String) : CocktailDetailsViewState()
-    data class Loaded(
-        val cocktail: Cocktail
-    ) : CocktailDetailsViewState()
 }

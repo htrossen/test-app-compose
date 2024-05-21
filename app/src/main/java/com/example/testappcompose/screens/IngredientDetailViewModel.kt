@@ -15,7 +15,7 @@ class IngredientDetailViewModel @Inject constructor(
     private val cocktailService: CocktailService
 ) : ViewModel() {
 
-    val viewState = mutableStateOf<IngredientDetailViewState>(IngredientDetailViewState.Loading)
+    val viewState = mutableStateOf<ViewState<IngredientDetailData>>(ViewState.Loading)
 
     fun loadData(ingredientName: String) = viewModelScope.launch {
         // On Success -- can live without if call fails
@@ -48,27 +48,25 @@ class IngredientDetailViewModel @Inject constructor(
         }.join()
 
         cocktails?.let {
-            viewState.value = IngredientDetailViewState.Loaded(
-                name = ingredientName,
-                image = "https://www.thecocktaildb.com/images/ingredients/$ingredientName.png",
-                abv = abv,
-                description = description,
-                cocktails = it
+            viewState.value = ViewState.Loaded(
+                IngredientDetailData(
+                    name = ingredientName,
+                    image = "https://www.thecocktaildb.com/images/ingredients/$ingredientName.png",
+                    abv = abv,
+                    description = description,
+                    cocktails = it
+                )
             )
         } ?: run {
-            viewState.value = IngredientDetailViewState.Error(diagnostics.orEmpty())
+            viewState.value = ViewState.Error(diagnostics.orEmpty())
         }
     }
 }
 
-sealed class IngredientDetailViewState {
-    object Loading : IngredientDetailViewState()
-    data class Error(val netDiagnostic: String) : IngredientDetailViewState()
-    data class Loaded(
-        val name: String,
-        val image: String,
-        val abv: String?,
-        val description: String?,
-        val cocktails: List<CarouselItem>
-    ) : IngredientDetailViewState()
-}
+data class IngredientDetailData(
+    val name: String,
+    val image: String,
+    val abv: String?,
+    val description: String?,
+    val cocktails: List<CarouselItem>
+)

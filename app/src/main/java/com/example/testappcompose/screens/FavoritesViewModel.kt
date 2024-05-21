@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testappcompose.common.CarouselItem
-import com.example.testappcompose.repo.PersonalizationRepo
+import com.example.testappcompose.core.repo.PersonalizationRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -13,15 +13,15 @@ import javax.inject.Inject
 class FavoritesViewModel @Inject constructor(
     private val personalizationRepo: PersonalizationRepo
 ) : ViewModel() {
-    val viewState = mutableStateOf<FavoritesViewState>(FavoritesViewState.Loading)
+    val viewState = mutableStateOf<ViewState<List<CarouselItem>>>(ViewState.Loading)
 
     init {
         viewModelScope.launch {
             personalizationRepo.getFavorites().collect {
                 if (it.isEmpty()) {
-                    viewState.value = FavoritesViewState.Empty
+                    viewState.value = ViewState.Empty
                 } else {
-                    viewState.value = FavoritesViewState.Loaded(
+                    viewState.value = ViewState.Loaded(
                         it.map { favorite ->
                             CarouselItem(favorite.id, favorite.imageUrl, favorite.name)
                         }
@@ -30,11 +30,4 @@ class FavoritesViewModel @Inject constructor(
             }
         }
     }
-}
-sealed class FavoritesViewState {
-    object Loading : FavoritesViewState()
-    object Empty : FavoritesViewState()
-    data class Loaded(
-        val cocktails: List<CarouselItem>
-    ) : FavoritesViewState()
 }

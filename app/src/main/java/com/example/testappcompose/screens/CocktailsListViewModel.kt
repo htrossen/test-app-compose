@@ -11,29 +11,22 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CocktailsViewModel @Inject constructor(
+class CocktailsListViewModel @Inject constructor(
     private val cocktailService: CocktailService
 ) : ViewModel() {
 
-    val viewState = mutableStateOf<CocktailsViewState>(CocktailsViewState.Loading)
+    val viewState = mutableStateOf<ViewState<List<CarouselItem>>>(ViewState.Loading)
 
     fun loadData(searchName: String) = viewModelScope.launch {
         cocktailService.getCocktailsBySearchName(searchName).onSuccess {
             if (it.isNotEmpty()) {
-                viewState.value = CocktailsViewState.Loaded(cocktails = it)
+                viewState.value = ViewState.Loaded(data = it)
             } else {
                 viewState.value =
-                    CocktailsViewState.Error("Cocktails list for $searchName was empty.")
+                    ViewState.Error("Cocktails list for $searchName was empty.")
             }
         }.onFailure {
-            viewState.value = CocktailsViewState.Error(it.netDiagnostics())
+            viewState.value = ViewState.Error(it.netDiagnostics())
         }
     }
-}
-sealed class CocktailsViewState {
-    object Loading : CocktailsViewState()
-    data class Error(val netDiagnostic: String) : CocktailsViewState()
-    data class Loaded(
-        val cocktails: List<CarouselItem>
-    ) : CocktailsViewState()
 }

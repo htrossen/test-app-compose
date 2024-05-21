@@ -1,4 +1,4 @@
-package com.example.testappcompose.repo
+package com.example.testappcompose.core.repo
 
 import com.example.testappcompose.core.data.Favorite
 import com.example.testappcompose.core.data.PersonalizationDao

@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,8 +41,8 @@ fun FavoritesPage(
             TopAppBar(
                 modifier = Modifier
                     .background(color = MaterialTheme.colorScheme.primary),
-                colors =  TopAppBarDefaults.topAppBarColors().copy(
-                    containerColor =  MaterialTheme.colorScheme.primary,
+                colors = TopAppBarDefaults.topAppBarColors().copy(
+                    containerColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
                     Text(
@@ -64,17 +64,18 @@ fun FavoritesPage(
             label = "Favorites Page"
         ) { state ->
             when (state) {
-                is FavoritesViewState.Loading -> LoadingState(
+                is ViewState.Loading -> LoadingState(
                     modifier = Modifier.fillMaxSize(),
                 )
-                is FavoritesViewState.Empty -> ProblemState(
+                is ViewState.Empty -> ProblemState(
                     modifier = Modifier.fillMaxSize(),
                     netDiagnostics = "No favorites.",
                     imageUrl = "https://media.istockphoto.com/id/465431628/photo/collection-of-glasses-used-for-alcoholic-drinks-on-white-backdrop.jpg?s=612x612&w=0&k=20&c=vMSxtSwB-ph47H8xshDfLN4tv9ipXRZ6MxOYRAZbiAM=",
                     primaryTextResId = R.string.empty_fav_text_primary,
                     secondaryTextResId = R.string.empty_fav_text_secondary,
                 )
-                is FavoritesViewState.Loaded -> {
+                is ViewState.Error -> {} // NO-OP
+                is ViewState.Loaded -> {
                     GridView(
                         modifier = Modifier
                             .fillMaxSize()
@@ -83,7 +84,7 @@ fun FavoritesPage(
                         imageModifier = Modifier
                             .background(MaterialTheme.colorScheme.surface)
                             .size(200.dp),
-                        components = state.cocktails,
+                        components = state.data,
                         clickAction = { navToCocktailDetails(it) }
                     )
                 }

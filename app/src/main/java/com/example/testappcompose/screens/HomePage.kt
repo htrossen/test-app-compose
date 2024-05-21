@@ -20,14 +20,14 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -79,8 +79,8 @@ fun HomePage(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = MaterialTheme.colorScheme.primary),
-                colors =  TopAppBarDefaults.topAppBarColors().copy(
-                    containerColor =  MaterialTheme.colorScheme.primary,
+                colors = TopAppBarDefaults.topAppBarColors().copy(
+                    containerColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
                     TextField(
@@ -205,8 +205,10 @@ fun HomePage(
                 label = "Ingredient Carousel"
             ) { state ->
                 when (state) {
-                    is HomeViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
-                    is HomeViewState.Loaded -> {
+                    is ViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
+                    is ViewState.Empty -> {} // NO-OP
+                    is ViewState.Error -> {} // NO-OP
+                    is ViewState.Loaded -> {
                         Column {
                             Text(
                                 modifier = Modifier.padding(
@@ -223,7 +225,7 @@ fun HomePage(
                                     .background(MaterialTheme.colorScheme.surface)
                                     .padding(vertical = 16.dp)
                                     .size(200.dp),
-                                components = state.liquors,
+                                components = state.data,
                                 clickAction = { navToIngredientDetails(it) }
                             )
                         }
