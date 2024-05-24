@@ -20,7 +20,7 @@ import javax.inject.Singleton
 internal object NetModule {
     private const val APPLICATION_JSON = "application/json"
 
-    private const val BaseUrl = "https://www.thecocktaildb.com/api/json/v1/1/"
+    private const val BASE_URL = "https://www.thecocktaildb.com/api/json/v1/1/"
 
     @Provides
     @Singleton
@@ -40,7 +40,7 @@ internal object NetModule {
         @Named("testOkHttpClient") okHttpClient: OkHttpClient
     ): Retrofit = Retrofit.Builder()
         .client(okHttpClient)
-        .baseUrl(BaseUrl)
+        .baseUrl(BASE_URL)
         .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(
             Json {
