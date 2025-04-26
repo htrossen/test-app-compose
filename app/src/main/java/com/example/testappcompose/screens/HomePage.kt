@@ -30,6 +30,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -64,7 +65,7 @@ fun HomePage(
 ) {
     val viewModel: HomeViewModel = viewModel()
 
-    val viewState by viewModel.viewState
+    val viewState by viewModel.viewState.collectAsState()
 
     val homeImageUrl = "https://img.freepik.com/free-photo/fresh-cocktails-with-ice-lemon-lime-fruits-generative-ai_188544-12370.jpg?size=626&ext=jpg&ga=GA1.1.386372595.1697932800&semt=sph"
     Scaffold(
@@ -136,6 +137,7 @@ fun HomePage(
                                 }
                             }
                         ),
+                        singleLine = true,
                         shape = CircleShape,
                         colors = TextFieldDefaults.colors().copy(
                             focusedContainerColor = MaterialTheme.colorScheme.primary,
@@ -218,6 +220,7 @@ fun HomePage(
                             HorizontalCarousel(
                                 imageModifier = Modifier
                                     .background(MaterialTheme.colorScheme.surface)
+                                    .padding(16.dp)
                                     .size(200.dp),
                                 components = state.data,
                                 clickAction = { navToIngredientDetails(it) }

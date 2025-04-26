@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,21 +44,17 @@ import com.example.testappcompose.common.ProblemState
 
 @Composable
 fun CocktailDetailPage(
-    cocktailId: String?,
+    cocktailId: String,
     navBack: () -> Unit
 ) {
     val viewModel: CocktailDetailViewModel = hiltViewModel()
 
-    val viewState by viewModel.viewState
+    val viewState by viewModel.viewState.collectAsState()
 
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        cocktailId?.let {
-            viewModel.loadData(cocktailId)
-        } ?: run {
-            viewModel.viewState.value = ViewState.Error("cocktailId null.")
-        }
+        viewModel.loadData(cocktailId)
     }
 
     Box {
@@ -72,9 +69,7 @@ fun CocktailDetailPage(
                 is ViewState.Error -> ProblemState(
                     modifier = Modifier.fillMaxSize(),
                     netDiagnostics = state.netDiagnostic,
-                    retry = if (cocktailId != null) {
-                        { viewModel.loadData(cocktailId) }
-                    } else null
+                    retry = { viewModel.loadData(cocktailId) }
                 )
                 is ViewState.Loaded -> {
                     val cocktail = state.data

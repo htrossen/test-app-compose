@@ -17,7 +17,7 @@ import com.bumptech.glide.load.model.GlideUrl
 fun GlideImageWrapper(
     modifier: Modifier,
     url: String,
-    contentScale: ContentScale = ContentScale.Fit,
+    contentScale: ContentScale = ContentScale.FillBounds,
     contentDescription: String? = null, // Use default when not important for A11Y
     imageAlignment: Alignment = Alignment.Center,
 ) {
@@ -28,7 +28,7 @@ fun GlideImageWrapper(
         contentDescription = contentDescription,
         contentScale = contentScale,
         transition = CrossFade,
-        loading = placeholder(ColorPainter(MaterialTheme.colorScheme.surface.copy(alpha = 15f))),
-        failure = placeholder(ColorPainter(MaterialTheme.colorScheme.surface.copy(alpha = 15f))),
+        loading = placeholder(ColorPainter(MaterialTheme.colorScheme.surface)),
+        failure = placeholder(ColorPainter(MaterialTheme.colorScheme.surface)),
     )
 }

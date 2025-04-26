@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -34,7 +35,7 @@ fun FavoritesPage(
 ) {
     val viewModel: FavoritesViewModel = hiltViewModel()
 
-    val viewState by viewModel.viewState
+    val viewState by viewModel.viewState.collectAsState()
 
     Scaffold(
         topBar = {

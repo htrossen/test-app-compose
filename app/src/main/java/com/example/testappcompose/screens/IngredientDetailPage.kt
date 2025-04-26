@@ -22,10 +22,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -42,21 +40,17 @@ import com.example.testappcompose.common.ProblemState
 
 @Composable
 fun IngredientDetailPage(
-    ingredientName: String?,
+    ingredientName: String,
     navToCocktailDetails: (String) -> Unit,
     navToViewAll: () -> Unit,
     navBack: () -> Unit
 ) {
     val viewModel: IngredientDetailViewModel = hiltViewModel()
 
-    val viewState by viewModel.viewState
+    val viewState by viewModel.viewState.collectAsState()
 
     LaunchedEffect(Unit) {
-        ingredientName?.let {
-            viewModel.loadData(ingredientName)
-        } ?: run {
-            viewModel.viewState.value = ViewState.Error("ingredientName null.")
-        }
+        viewModel.loadData(ingredientName)
     }
 
     Box {
@@ -71,9 +65,7 @@ fun IngredientDetailPage(
                 is ViewState.Error -> ProblemState(
                     modifier = Modifier.fillMaxSize(),
                     netDiagnostics = state.netDiagnostic,
-                    retry = if (ingredientName != null) {
-                        { viewModel.loadData(ingredientName) }
-                    } else null
+                    retry = { viewModel.loadData(ingredientName) }
                 )
                 is ViewState.Loaded -> {
                     Column(
@@ -119,30 +111,25 @@ fun IngredientDetailPage(
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp),
                             horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            verticalAlignment = Alignment.Bottom
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 modifier = Modifier.weight(1f),
                                 text = stringResource(
                                     id = R.string.type_cocktails,
-                                    ingredientName.orEmpty()
+                                    ingredientName
                                 ),
                                 style = MaterialTheme.typography.headlineSmall,
                             )
 
                             if (state.data.cocktails.size > 10) {
-                                var pressed by remember { mutableStateOf(false) }
-                                val color = if (pressed) {
-                                    MaterialTheme.colorScheme.tertiary
-                                } else MaterialTheme.colorScheme.primary
-
                                 TextButton(
                                     onClick = navToViewAll,
                                     shape = RoundedCornerShape(6.dp)
                                 ) {
                                     Text(
                                         text = stringResource(id = R.string.view_all),
-                                        color = color,
+                                        color = MaterialTheme.colorScheme.primary,
                                         fontWeight = FontWeight.Bold,
                                         textAlign = TextAlign.Center,
                                         style = MaterialTheme.typography.headlineSmall,

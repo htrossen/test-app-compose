@@ -9,6 +9,8 @@ import com.example.testappcompose.core.model.Cocktail
 import com.example.testappcompose.core.repo.PersonalizationRepo
 import com.example.testappcompose.core.service.CocktailService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,21 +20,23 @@ class CocktailDetailViewModel @Inject constructor(
     private val personalizationRepo: PersonalizationRepo
 ) : ViewModel() {
 
-    val viewState = mutableStateOf<ViewState<Cocktail>>(ViewState.Loading)
+    private var _viewState = MutableStateFlow<ViewState<Cocktail>>(ViewState.Loading)
+    val viewState: StateFlow<ViewState<Cocktail>> = _viewState
 
     val favorite = mutableStateOf(false)
 
     fun loadData(id: String) {
         viewModelScope.launch {
             cocktailService.getCocktailById(id).onSuccess {
-                if (it != null) {
-                    viewState.value = ViewState.Loaded(data = it)
-                } else {
-                    viewState.value =
+                _viewState.tryEmit(
+                    if (it != null) {
+                        ViewState.Loaded(data = it)
+                    } else {
                         ViewState.Error("Cocktail info for $id was null.")
-                }
+                    }
+                )
             }.onFailure {
-                viewState.value = ViewState.Error(it.netDiagnostics())
+                _viewState.tryEmit(ViewState.Error(it.netDiagnostics()))
             }
         }
         viewModelScope.launch {
