@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.example.testappcompose.R
 
 @Composable
-fun CarouselItem(
+fun CarouselItemComponent(
     modifier: Modifier,
     imageModifier: Modifier,
     component: CarouselItem,

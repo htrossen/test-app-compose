@@ -26,7 +26,7 @@ fun GridView(
     ) {
         components.forEach { component ->
             item {
-                CarouselItem(
+                CarouselItemComponent(
                     modifier = Modifier
                         .width(192.dp)
                         .heightIn(min = 80.dp),

@@ -218,7 +218,6 @@ fun HomePage(
                             HorizontalCarousel(
                                 imageModifier = Modifier
                                     .background(MaterialTheme.colorScheme.surface)
-                                    .padding(vertical = 16.dp)
                                     .size(200.dp),
                                 components = state.data,
                                 clickAction = { navToIngredientDetails(it) }
