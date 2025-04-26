@@ -49,7 +49,7 @@ fun CocktailsPage(
         label = "Cocktails List Page"
     ) { state ->
         when (state) {
-            is ViewState.Loading -> LoadingState(
+            ViewState.Uninitialized, ViewState.Loading -> LoadingState(
                 modifier = Modifier.fillMaxSize(),
                 navBack = navBack
             )

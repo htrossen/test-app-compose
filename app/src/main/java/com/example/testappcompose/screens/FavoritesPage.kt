@@ -65,7 +65,7 @@ fun FavoritesPage(
             label = "Favorites Page"
         ) { state ->
             when (state) {
-                is ViewState.Loading -> LoadingState(
+                ViewState.Uninitialized, ViewState.Loading -> LoadingState(
                     modifier = Modifier.fillMaxSize(),
                 )
                 is ViewState.Empty -> ProblemState(

@@ -8,6 +8,7 @@ import com.example.testappcompose.core.service.CocktailService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,10 +17,20 @@ class IngredientDetailViewModel @Inject constructor(
     private val cocktailService: CocktailService
 ) : ViewModel() {
 
-    private var _viewState = MutableStateFlow<ViewState<IngredientDetailData>>(ViewState.Loading)
+    private var _viewState = MutableStateFlow<ViewState<IngredientDetailData>>(ViewState.Uninitialized)
     val viewState: StateFlow<ViewState<IngredientDetailData>> = _viewState
 
-    fun loadData(ingredientName: String) = viewModelScope.launch {
+    fun loadData(ingredientName: String) {
+        _viewState.update { it.errorToUninitialized() }
+
+        loadDataIfNeeded(ingredientName)
+    }
+
+    private fun loadDataIfNeeded(ingredientName: String) = viewModelScope.launch {
+        if (_viewState.value !is ViewState.Uninitialized) return@launch
+
+        _viewState.update { ViewState.Loading }
+
         // On Success -- can live without if call fails
         var abv: String? = null
         var description: String? = null
@@ -29,6 +40,7 @@ class IngredientDetailViewModel @Inject constructor(
 
         // On Error
         var diagnostics: String? = null
+
         viewModelScope.launch {
             launch {
                 cocktailService.getCocktailIngredient(ingredientName).onSuccess {

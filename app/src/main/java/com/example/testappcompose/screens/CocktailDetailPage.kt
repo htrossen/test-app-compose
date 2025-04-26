@@ -64,7 +64,7 @@ fun CocktailDetailPage(
             label = "Cocktail Detail Page"
         ) { state ->
             when (state) {
-                is ViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
+                ViewState.Uninitialized, ViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
                 is ViewState.Empty -> {} // NO-OP
                 is ViewState.Error -> ProblemState(
                     modifier = Modifier.fillMaxSize(),
@@ -118,9 +118,7 @@ fun CocktailDetailPage(
                                     .size(56.dp)
                                     .clip(RoundedCornerShape(6.dp))
                                     .clickable {
-                                        cocktailId?.let {
-                                            viewModel.saveOrRemoveAsFavorite(it, cocktail)
-                                        }
+                                        viewModel.saveOrRemoveAsFavorite(cocktailId, cocktail)
                                     }
                                     .padding(8.dp),
                                 painter = painterResource(
@@ -142,34 +140,32 @@ fun CocktailDetailPage(
                                     .size(56.dp)
                                     .clip(RoundedCornerShape(6.dp))
                                     .clickable {
-                                        cocktailId?.let {
-                                            val title = context.getString(
-                                                R.string.share_title,
-                                                cocktail.name
-                                            )
-                                            val sendIntent = Intent(Intent.ACTION_SEND).apply {
-                                                putExtra(Intent.EXTRA_TITLE, title)
-                                                putExtra(
-                                                    Intent.EXTRA_TEXT,
-                                                    context.getString(
-                                                        R.string.share_ingredients_instructions,
-                                                        title,
-                                                        cocktail.ingredients.joinToString("\n") {
-                                                            "${it.amount} ${it.name}"
-                                                        },
-                                                        cocktail.instructions
-                                                    )
-                                                )
-                                                type = "text/plain"
-                                            }
-                                            val shareIntent = Intent.createChooser(
-                                                sendIntent,
+                                        val title = context.getString(
+                                            R.string.share_title,
+                                            cocktail.name
+                                        )
+                                        val sendIntent = Intent(Intent.ACTION_SEND).apply {
+                                            putExtra(Intent.EXTRA_TITLE, title)
+                                            putExtra(
+                                                Intent.EXTRA_TEXT,
                                                 context.getString(
-                                                    R.string.share_recipe
+                                                    R.string.share_ingredients_instructions,
+                                                    title,
+                                                    cocktail.ingredients.joinToString("\n") {
+                                                        "${it.amount} ${it.name}"
+                                                    },
+                                                    cocktail.instructions
                                                 )
                                             )
-                                            ContextCompat.startActivity(context, shareIntent, null)
+                                            type = "text/plain"
                                         }
+                                        val shareIntent = Intent.createChooser(
+                                            sendIntent,
+                                            context.getString(
+                                                R.string.share_recipe
+                                            )
+                                        )
+                                        ContextCompat.startActivity(context, shareIntent, null)
                                     }
                                     .padding(8.dp),
                                 painter = painterResource(id = R.drawable.share),

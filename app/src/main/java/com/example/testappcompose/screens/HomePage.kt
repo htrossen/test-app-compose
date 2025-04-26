@@ -202,7 +202,7 @@ fun HomePage(
                 label = "Ingredient Carousel"
             ) { state ->
                 when (state) {
-                    is ViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
+                    ViewState.Uninitialized, ViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
                     is ViewState.Empty -> {} // NO-OP
                     is ViewState.Error -> {} // NO-OP
                     is ViewState.Loaded -> {
@@ -221,7 +221,7 @@ fun HomePage(
                                 imageModifier = Modifier
                                     .background(MaterialTheme.colorScheme.surface)
                                     .padding(16.dp)
-                                    .size(200.dp),
+                                    .size(175.dp),
                                 components = state.data,
                                 clickAction = { navToIngredientDetails(it) }
                             )

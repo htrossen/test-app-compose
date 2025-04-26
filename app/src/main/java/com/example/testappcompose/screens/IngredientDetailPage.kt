@@ -60,7 +60,7 @@ fun IngredientDetailPage(
             label = "Ingredient Detail Page"
         ) { state ->
             when (state) {
-                is ViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
+                ViewState.Uninitialized, ViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
                 is ViewState.Empty -> {} // NO-OP
                 is ViewState.Error -> ProblemState(
                     modifier = Modifier.fillMaxSize(),

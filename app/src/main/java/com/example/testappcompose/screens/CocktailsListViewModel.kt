@@ -8,6 +8,7 @@ import com.example.testappcompose.core.service.CocktailService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,17 +20,29 @@ class CocktailsListViewModel @Inject constructor(
     private var _viewState = MutableStateFlow<ViewState<List<CarouselItem>>>(ViewState.Loading)
     val viewState: StateFlow<ViewState<List<CarouselItem>>> = _viewState
 
-    fun loadData(searchName: String) = viewModelScope.launch {
-        cocktailService.getCocktailsBySearchName(searchName).onSuccess {
-            _viewState.tryEmit(
-                if (it.isNotEmpty()) {
-                    ViewState.Loaded(data = it)
-                } else {
-                    ViewState.Error("Cocktails list for $searchName was empty.")
-                }
-            )
-        }.onFailure {
-            _viewState.tryEmit(ViewState.Error(it.netDiagnostics()))
+    fun loadData(searchName: String) {
+        _viewState.update { it.errorToUninitialized() }
+
+        loadDataIfNeeded(searchName)
+    }
+
+    private fun loadDataIfNeeded(searchName: String) {
+        if (_viewState.value !is ViewState.Uninitialized) return
+
+        _viewState.update { ViewState.Loading }
+
+        viewModelScope.launch {
+            cocktailService.getCocktailsBySearchName(searchName).onSuccess {
+                _viewState.tryEmit(
+                    if (it.isNotEmpty()) {
+                        ViewState.Loaded(data = it)
+                    } else {
+                        ViewState.Error("Cocktails list for $searchName was empty.")
+                    }
+                )
+            }.onFailure {
+                _viewState.tryEmit(ViewState.Error(it.netDiagnostics()))
+            }
         }
     }
 }
