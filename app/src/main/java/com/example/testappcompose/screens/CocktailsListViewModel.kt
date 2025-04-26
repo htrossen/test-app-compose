@@ -17,7 +17,7 @@ class CocktailsListViewModel @Inject constructor(
     private val cocktailService: CocktailService
 ) : ViewModel() {
 
-    private var _viewState = MutableStateFlow<ViewState<List<CarouselItem>>>(ViewState.Loading)
+    private var _viewState = MutableStateFlow<ViewState<List<CarouselItem>>>(ViewState.Uninitialized)
     val viewState: StateFlow<ViewState<List<CarouselItem>>> = _viewState
 
     fun loadData(searchName: String) {

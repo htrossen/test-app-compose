@@ -5,27 +5,31 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -71,6 +75,9 @@ fun IngredientDetailPage(
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.background)
+                            .statusBarsPadding()
+                            .navigationBarsPadding()
                             .verticalScroll(rememberScrollState())
                             .padding(bottom = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -106,15 +113,19 @@ fun IngredientDetailPage(
 
                         HorizontalDivider(color = MaterialTheme.colorScheme.primary)
 
+                        val labelModifier = if (state.data.cocktails.size > 10) {
+                            Modifier
+                                .clip(shape = RoundedCornerShape(12.dp))
+                                .clickable { navToViewAll() }
+                        } else Modifier
+
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
+                            modifier = labelModifier
+                                .padding(horizontal = 16.dp, vertical = 4.dp),
                             horizontalArrangement = Arrangement.spacedBy(16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                modifier = Modifier.weight(1f),
                                 text = stringResource(
                                     id = R.string.type_cocktails,
                                     ingredientName
@@ -123,20 +134,14 @@ fun IngredientDetailPage(
                             )
 
                             if (state.data.cocktails.size > 10) {
-                                TextButton(
-                                    onClick = navToViewAll,
-                                    shape = RoundedCornerShape(6.dp)
-                                ) {
-                                    Text(
-                                        text = stringResource(id = R.string.view_all),
-                                        color = MaterialTheme.colorScheme.primary,
-                                        fontWeight = FontWeight.Bold,
-                                        textAlign = TextAlign.Center,
-                                        style = MaterialTheme.typography.headlineSmall,
-                                    )
-                                }
+                                Icon(
+                                    painter = painterResource(id = R.drawable.arrow_forward),
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                    contentDescription = stringResource(id = R.string.view_all)
+                                )
                             }
                         }
+
                         HorizontalCarousel(
                             imageModifier = Modifier
                                 .background(MaterialTheme.colorScheme.surface)

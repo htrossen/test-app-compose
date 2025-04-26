@@ -1,8 +1,8 @@
 [versions]
 minSdk = "24"
 compileSdk = "35"
-targetSdk = "34"
-buildTools = "34.0.0"
+targetSdk = "35"
+buildTools = "35.0.0"
 java = "VERSION_21"
 kotlin = "2.1.20"
 

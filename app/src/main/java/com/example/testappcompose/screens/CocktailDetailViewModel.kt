@@ -21,7 +21,7 @@ class CocktailDetailViewModel @Inject constructor(
     private val personalizationRepo: PersonalizationRepo
 ) : ViewModel() {
 
-    private var _viewState = MutableStateFlow<ViewState<Cocktail>>(ViewState.Loading)
+    private var _viewState = MutableStateFlow<ViewState<Cocktail>>(ViewState.Uninitialized)
     val viewState: StateFlow<ViewState<Cocktail>> = _viewState
 
     val favorite = mutableStateOf(false)
