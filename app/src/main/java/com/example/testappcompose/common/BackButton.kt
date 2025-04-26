@@ -2,11 +2,9 @@ package com.example.testappcompose.common
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -36,7 +34,7 @@ fun BackButton(
         modifier = Modifier
             .focusRequester(focusRequester)
             .then(modifier)
-            .clip(RoundedCornerShape(6.dp))
+            .clip(CircleShape)
             .clickable { onBack() }
             .padding(8.dp)
     )
@@ -63,10 +61,8 @@ fun FloatingBackButton(
             .focusRequester(focusRequester)
             .then(modifier)
             .background(color = backgroundColor, shape = CircleShape)
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = null,
-            ) { onBack() }
+            .clip(CircleShape)
+            .clickable { onBack() }
             .padding(8.dp)
     )
 

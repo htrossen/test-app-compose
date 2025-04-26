@@ -2,6 +2,7 @@
     <string name="app_name">Cocktails</string>
     <!--    Home Page-->
     <string name="search">Search</string>
+    <string name="clear_search_cd">Clear search</string>
     <string name="search_placeholder">Cocktail Name or Ingredient</string>
     <string name="cancel">Cancel</string>
     <string name="find_next_cocktail">Find your next cocktail!</string>

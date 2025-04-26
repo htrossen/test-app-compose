@@ -14,10 +14,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,7 +39,6 @@ import com.example.testappcompose.common.GlideImageWrapper
 import com.example.testappcompose.common.HorizontalCarousel
 import com.example.testappcompose.common.LoadingState
 import com.example.testappcompose.common.ProblemState
-import com.example.testappcompose.core.extension.clickableWithPressedListener
 
 @Composable
 fun IngredientDetailPage(
@@ -135,18 +136,18 @@ fun IngredientDetailPage(
                                     MaterialTheme.colorScheme.tertiary
                                 } else MaterialTheme.colorScheme.primary
 
-                                Text(
-                                    modifier = Modifier
-                                        .clickableWithPressedListener(
-                                            pressChanged = { pressed = it },
-                                            onClick = navToViewAll
-                                        ),
-                                    text = stringResource(id = R.string.view_all),
-                                    color = color,
-                                    fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.headlineSmall,
-                                )
+                                TextButton(
+                                    onClick = navToViewAll,
+                                    shape = RoundedCornerShape(6.dp)
+                                ) {
+                                    Text(
+                                        text = stringResource(id = R.string.view_all),
+                                        color = color,
+                                        fontWeight = FontWeight.Bold,
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.headlineSmall,
+                                    )
+                                }
                             }
                         }
                         HorizontalCarousel(

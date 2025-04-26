@@ -1,6 +1,5 @@
 package com.example.testappcompose.core.net
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,6 +9,7 @@ import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 internal object NetModule {
-    private const val APPLICATION_JSON = "application/json"
+    private const val APPLICATION_JSON = "application/json; charset=UTF8"
 
     private const val BASE_URL = "https://www.thecocktaildb.com/api/json/v1/1/"
 

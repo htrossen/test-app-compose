@@ -15,7 +15,7 @@ interface Service {
                 .onFailure {
                     // TODO: Use real logger
                     val netDiagnostics = it.netDiagnostics()
-                    println("Api call failed: $netDiagnostics\n$it")
+                    println("Api call failed: $netDiagnostics $it")
                 }
         }
 }

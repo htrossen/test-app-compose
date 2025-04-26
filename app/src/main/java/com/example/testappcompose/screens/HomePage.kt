@@ -6,7 +6,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +21,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -53,7 +53,6 @@ import com.example.testappcompose.R
 import com.example.testappcompose.common.GlideImageWrapper
 import com.example.testappcompose.common.HorizontalCarousel
 import com.example.testappcompose.common.LoadingState
-import com.example.testappcompose.core.extension.clickableWithPressedListener
 import com.example.testappcompose.core.extension.titleCase
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -102,6 +101,23 @@ fun HomePage(
                                 contentDescription = stringResource(id = R.string.search)
                             )
                         },
+                        trailingIcon = if (searchText.text.isNotEmpty()) {
+                            {
+                                IconButton(
+                                    onClick = {
+                                        searchText = TextFieldValue("")
+                                        searchBarFocused = false
+                                        focusManager.clearFocus()
+                                    }
+                                ) {
+                                    Icon(
+                                        painterResource(R.drawable.close),
+                                        tint = MaterialTheme.colorScheme.background,
+                                        contentDescription = stringResource(R.string.clear_search_cd)
+                                    )
+                                }
+                            }
+                        } else null,
                         placeholder = {
                             Text(
                                 text = stringResource(id = R.string.search_placeholder),
@@ -133,34 +149,13 @@ fun HomePage(
                     )
                 },
                 actions = {
-                    if (searchBarFocused) {
-                        var pressed by remember { mutableStateOf(false) }
-                        val color = if (pressed) {
-                            MaterialTheme.colorScheme.onPrimary
-                        } else MaterialTheme.colorScheme.background
-
-                        Text(
-                            modifier = Modifier
-                                .padding(end = 12.dp)
-                                .clickableWithPressedListener(
-                                    pressChanged = { pressed = it },
-                                    onClick = {
-                                        searchText = TextFieldValue("")
-                                        searchBarFocused = false
-                                        focusManager.clearFocus()
-                                    }
-                                ),
-                            text = stringResource(id = R.string.cancel),
-                            color = color,
-                            style = MaterialTheme.typography.labelLarge,
-                        )
-                    } else {
+                    IconButton(
+                        modifier = Modifier
+                            .padding(end = 4.dp),
+                        onClick = { navToFavorites() },
+                    ) {
                         Icon(
-                            modifier = Modifier
-                                .padding(end = 4.dp)
-                                .clip(RoundedCornerShape(6.dp))
-                                .clickable { navToFavorites() }
-                                .padding(8.dp),
+                            modifier = Modifier.size(32.dp),
                             painter = painterResource(id = R.drawable.favorite_filled),
                             tint = MaterialTheme.colorScheme.background,
                             contentDescription = stringResource(id = R.string.favorites)
