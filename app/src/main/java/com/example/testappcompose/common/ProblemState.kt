@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,16 +52,14 @@ fun ProblemState(
                     .clickable(enabled = BuildConfig.DEBUG) { showAlertDialog = true },
                 url = imageUrl
             )
-            Text(
+            TextHeadlineSmall(
                 text = stringResource(id = primaryTextResId),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge,
             )
-            Text(
+            TextBodyMedium(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 text = stringResource(id = secondaryTextResId),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyMedium,
             )
 
             retry?.let {
@@ -71,7 +67,7 @@ fun ProblemState(
                     modifier = Modifier.padding(16.dp),
                     onClick = retry
                 ) {
-                    Text(
+                    TextBodySmall(
                         text = stringResource(id = R.string.error_text_retry),
                         fontWeight = FontWeight.Bold,
                     )
@@ -89,15 +85,13 @@ fun ProblemState(
             onDismissRequest = { showAlertDialog = false },
             confirmButton = { },
             title = {
-                Text(
+                TextHeadlineSmall(
                     text = "Error Diagnostics",
-                    style = MaterialTheme.typography.headlineSmall,
                 )
             },
             text = {
-                Text(
+                TextBodyLarge(
                     text = netDiagnostics,
-                    style = MaterialTheme.typography.bodyLarge,
                 )
             }
         )

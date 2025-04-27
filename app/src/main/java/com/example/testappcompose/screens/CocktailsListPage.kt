@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -27,6 +26,7 @@ import com.example.testappcompose.common.BackButton
 import com.example.testappcompose.common.GridView
 import com.example.testappcompose.common.LoadingState
 import com.example.testappcompose.common.ProblemState
+import com.example.testappcompose.common.TextHeadlineSmall
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,7 +71,7 @@ fun CocktailsPage(
                                 containerColor = MaterialTheme.colorScheme.primary,
                             ),
                             title = {
-                                Text(
+                                TextHeadlineSmall(
                                     text = if (nonAlcoholic) {
                                         stringResource(id = R.string.mocktails)
                                     } else {
@@ -80,8 +80,6 @@ fun CocktailsPage(
                                             searchName
                                         )
                                     },
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    style = MaterialTheme.typography.headlineSmall
                                 )
                             },
                             navigationIcon = {

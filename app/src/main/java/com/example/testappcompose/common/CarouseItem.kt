@@ -11,13 +11,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.testappcompose.R
 
@@ -50,20 +48,15 @@ fun CarouselItemComponent(
                 Column(
                     modifier = Modifier.padding(start = 16.dp).weight(1f),
                 ) {
-                    Text(
+                    TextBodyLarge(
                         text = component.title,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.bodyLarge,
                         maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
                     )
                     component.subtitle?.let { subtitle ->
-                        Text(
+                        TextBodySmall(
                             text = subtitle,
-                            style = MaterialTheme.typography.bodySmall,
+                            fontWeight = FontWeight.Light,
                             maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
                         )
                     }
                 }

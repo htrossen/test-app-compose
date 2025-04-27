@@ -25,7 +25,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
@@ -45,7 +44,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -56,6 +54,10 @@ import com.example.testappcompose.R
 import com.example.testappcompose.common.GlideImageWrapper
 import com.example.testappcompose.common.HorizontalCarousel
 import com.example.testappcompose.common.LoadingState
+import com.example.testappcompose.common.TextBodySmall
+import com.example.testappcompose.common.TextHeadlineLarge
+import com.example.testappcompose.common.TextHeadlineSmall
+import com.example.testappcompose.common.TextTitleMedium
 import com.example.testappcompose.core.extension.titleCase
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,10 +125,9 @@ fun HomePage(
                             }
                         } else null,
                         placeholder = {
-                            Text(
+                            TextBodySmall(
                                 text = stringResource(id = R.string.search_placeholder),
                                 color = MaterialTheme.colorScheme.background.copy(.8f),
-                                style = MaterialTheme.typography.labelLarge,
                             )
                         },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
@@ -187,14 +188,12 @@ fun HomePage(
                     .clip(RoundedCornerShape(6.dp)),
                 url = homeImageUrl
             )
-            Text(
+            TextHeadlineLarge(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 text = stringResource(id = R.string.find_next_cocktail),
                 textAlign = TextAlign.Center,
-                fontWeight = FontWeight.Bold,
-                style = MaterialTheme.typography.headlineLarge,
             )
-            Text(
+            TextTitleMedium(
                 modifier = Modifier
                     .clip(RoundedCornerShape(6.dp))
                     .clickable { navToMocktails() }
@@ -202,7 +201,6 @@ fun HomePage(
                 text = stringResource(id = R.string.search_mocktails),
                 textAlign = TextAlign.Center,
                 textDecoration = TextDecoration.Underline,
-                style = MaterialTheme.typography.titleMedium,
             )
 
             HorizontalDivider(
@@ -221,7 +219,7 @@ fun HomePage(
                     is ViewState.Error -> {} // NO-OP
                     is ViewState.Loaded -> {
                         Column {
-                            Text(
+                            TextHeadlineSmall(
                                 modifier = Modifier.padding(
                                     start = 16.dp,
                                     bottom = 16.dp,
@@ -229,7 +227,6 @@ fun HomePage(
                                 ),
                                 text = stringResource(id = R.string.search_by_liquor),
                                 textAlign = TextAlign.Center,
-                                style = MaterialTheme.typography.headlineSmall,
                             )
                             HorizontalCarousel(
                                 imageModifier = Modifier

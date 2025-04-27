@@ -21,7 +21,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,6 +39,9 @@ import com.example.testappcompose.common.GlideImageWrapper
 import com.example.testappcompose.common.HorizontalCarousel
 import com.example.testappcompose.common.LoadingState
 import com.example.testappcompose.common.ProblemState
+import com.example.testappcompose.common.TextBodySmall
+import com.example.testappcompose.common.TextHeadlineLarge
+import com.example.testappcompose.common.TextHeadlineSmall
 
 @Composable
 fun IngredientDetailPage(
@@ -95,17 +96,12 @@ fun IngredientDetailPage(
                             )
 
                             Column(modifier = Modifier.weight(.5f)) {
-                                Text(
+                                TextHeadlineLarge(
                                     text = state.data.name,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    fontWeight = FontWeight.Bold,
-                                    style = MaterialTheme.typography.headlineLarge
                                 )
                                 state.data.abv?.let { abv ->
-                                    Text(
+                                    TextHeadlineSmall(
                                         text = "$abv ABV",
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        style = MaterialTheme.typography.headlineSmall
                                     )
                                 }
                             }
@@ -125,12 +121,11 @@ fun IngredientDetailPage(
                             horizontalArrangement = Arrangement.spacedBy(16.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(
+                            TextHeadlineSmall(
                                 text = stringResource(
                                     id = R.string.type_cocktails,
                                     ingredientName
                                 ),
-                                style = MaterialTheme.typography.headlineSmall,
                             )
 
                             if (state.data.cocktails.size > 10) {
@@ -151,18 +146,15 @@ fun IngredientDetailPage(
                         )
 
                         state.data.description?.let { description ->
-                            Text(
+                            TextHeadlineSmall(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                                 text = stringResource(id = R.string.what_is, state.data.name),
                                 textAlign = TextAlign.Center,
-                                style = MaterialTheme.typography.headlineSmall,
                             )
 
-                            Text(
+                            TextBodySmall(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                                 text = description,
-                                fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.bodySmall,
                             )
                         }
                     }

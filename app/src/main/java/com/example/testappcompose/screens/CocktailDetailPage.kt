@@ -22,7 +22,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,7 +32,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -43,6 +41,11 @@ import com.example.testappcompose.common.FloatingBackButton
 import com.example.testappcompose.common.GlideImageWrapper
 import com.example.testappcompose.common.LoadingState
 import com.example.testappcompose.common.ProblemState
+import com.example.testappcompose.common.TextBodyMedium
+import com.example.testappcompose.common.TextBodySmall
+import com.example.testappcompose.common.TextHeadlineLarge
+import com.example.testappcompose.common.TextHeadlineSmall
+import com.example.testappcompose.common.TextTitleMedium
 
 @Composable
 fun CocktailDetailPage(
@@ -102,16 +105,11 @@ fun CocktailDetailPage(
                             verticalAlignment = Alignment.Bottom
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
-                                Text(
+                                TextHeadlineLarge(
                                     text = cocktail.name,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    fontWeight = FontWeight.Bold,
-                                    style = MaterialTheme.typography.headlineLarge
                                 )
-                                Text(
+                                TextTitleMedium(
                                     text = stringResource(id = R.string.glass_type, cocktail.glass),
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    style = MaterialTheme.typography.titleMedium
                                 )
                             }
 
@@ -180,37 +178,31 @@ fun CocktailDetailPage(
 
                         HorizontalDivider(color = MaterialTheme.colorScheme.primary)
 
-                        Text(
+                        TextHeadlineSmall(
                             text = stringResource(id = R.string.ingredients),
                             textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.headlineSmall,
                         )
 
                         cocktail.ingredients.forEach { ingredient ->
                             Row(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
-                                Text(
+                                TextBodyMedium(
                                     text = "${ingredient.amount} ",
-                                    style = MaterialTheme.typography.bodyMedium,
                                 )
-                                Text(
+                                TextBodyMedium(
                                     text = ingredient.name,
-                                    style = MaterialTheme.typography.bodyMedium,
                                 )
                             }
                         }
 
-                        Text(
+                        TextHeadlineSmall(
                             text = stringResource(id = R.string.instructions),
                             textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.headlineSmall,
                         )
 
-                        Text(
+                        TextBodySmall(
                             text = cocktail.instructions,
-                            fontWeight = FontWeight.Bold,
-                            style = MaterialTheme.typography.bodySmall,
                         )
                     }
                 }
