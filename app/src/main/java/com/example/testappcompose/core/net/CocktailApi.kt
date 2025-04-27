@@ -14,6 +14,11 @@ interface CocktailApi {
         @Query("i") i: String
     ): CocktailListResponse
 
+    @GET("filter.php")
+    suspend fun getNonAlcoholic(
+        @Query("a") a: String = "Non_Alcoholic",
+    ): CocktailListResponse
+
     @GET("search.php")
     suspend fun getCocktailsByName(
         @Query("s") s: String

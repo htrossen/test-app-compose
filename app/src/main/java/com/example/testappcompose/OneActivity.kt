@@ -43,6 +43,11 @@ class OneActivity : ComponentActivity() {
                                 navToFavorites = {
                                     navController.navigate(Favorites)
                                 },
+                                navToMocktails = {
+                                    navController.navigate(
+                                        CocktailsSearch(searchName = "", nonAlcoholic = true)
+                                    )
+                                },
                                 navToIngredientDetails = { ingredientId ->
                                     navController.navigate(IngredientDetails(ingredientId))
                                 }
@@ -70,8 +75,10 @@ class OneActivity : ComponentActivity() {
                             )
                         }
                         composable<CocktailsSearch> { backStackEntry ->
+                            val route = backStackEntry.toRoute<CocktailsSearch>()
                             CocktailsPage(
-                                searchName = backStackEntry.toRoute<CocktailsSearch>().searchName,
+                                searchName = route.searchName,
+                                nonAlcoholic = route.nonAlcoholic,
                                 navToCocktailDetails = { cocktailId ->
                                     navController.navigate(CocktailDetails(cocktailId))
                                 },

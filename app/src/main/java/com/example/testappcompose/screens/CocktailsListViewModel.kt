@@ -20,28 +20,42 @@ class CocktailsListViewModel @Inject constructor(
     private var _viewState = MutableStateFlow<ViewState<List<CarouselItem>>>(ViewState.Uninitialized)
     val viewState: StateFlow<ViewState<List<CarouselItem>>> = _viewState
 
-    fun loadData(searchName: String) {
+    fun loadData(searchName: String, nonAlcoholic: Boolean) {
         _viewState.update { it.errorToUninitialized() }
 
-        loadDataIfNeeded(searchName)
+        loadDataIfNeeded(searchName, nonAlcoholic)
     }
 
-    private fun loadDataIfNeeded(searchName: String) {
+    private fun loadDataIfNeeded(searchName: String, nonAlcoholic: Boolean) {
         if (_viewState.value !is ViewState.Uninitialized) return
 
         _viewState.update { ViewState.Loading }
 
         viewModelScope.launch {
-            cocktailService.getCocktailsBySearchName(searchName).onSuccess {
-                _viewState.tryEmit(
-                    if (it.isNotEmpty()) {
-                        ViewState.Loaded(data = it)
-                    } else {
-                        ViewState.Error("Cocktails list for $searchName was empty.")
-                    }
-                )
-            }.onFailure {
-                _viewState.tryEmit(ViewState.Error(it.netDiagnostics()))
+            if (nonAlcoholic) {
+                cocktailService.getNonAlcoholic().onSuccess {
+                    _viewState.tryEmit(
+                        if (it.isNotEmpty()) {
+                            ViewState.Loaded(data = it)
+                        } else {
+                            ViewState.Error("Non-Alcoholic list was empty.")
+                        }
+                    )
+                }.onFailure {
+                    _viewState.tryEmit(ViewState.Error(it.netDiagnostics()))
+                }
+            } else {
+                cocktailService.getCocktailsBySearchName(searchName).onSuccess {
+                    _viewState.tryEmit(
+                        if (it.isNotEmpty()) {
+                            ViewState.Loaded(data = it)
+                        } else {
+                            ViewState.Error("Cocktails list for $searchName was empty.")
+                        }
+                    )
+                }.onFailure {
+                    _viewState.tryEmit(ViewState.Error(it.netDiagnostics()))
+                }
             }
         }
     }

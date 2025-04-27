@@ -32,6 +32,7 @@ import com.example.testappcompose.common.ProblemState
 @Composable
 fun CocktailsPage(
     searchName: String,
+    nonAlcoholic: Boolean = false,
     navToCocktailDetails: (String) -> Unit,
     navBack: () -> Unit
 ) {
@@ -40,7 +41,7 @@ fun CocktailsPage(
     val viewState by viewModel.viewState.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.loadData(searchName)
+        viewModel.loadData(searchName, nonAlcoholic)
     }
 
     AnimatedContent(
@@ -58,7 +59,7 @@ fun CocktailsPage(
                 modifier = Modifier.fillMaxSize(),
                 netDiagnostics = state.netDiagnostic,
                 navBack = navBack,
-                retry = { viewModel.loadData(searchName) }
+                retry = { viewModel.loadData(searchName, nonAlcoholic) }
             )
             is ViewState.Loaded -> {
                 Scaffold(
@@ -71,10 +72,14 @@ fun CocktailsPage(
                             ),
                             title = {
                                 Text(
-                                    text = stringResource(
-                                        id = R.string.type_cocktails,
-                                        searchName.orEmpty()
-                                    ),
+                                    text = if (nonAlcoholic) {
+                                        stringResource(id = R.string.mocktails)
+                                    } else {
+                                        stringResource(
+                                            id = R.string.type_cocktails,
+                                            searchName
+                                        )
+                                    },
                                     color = MaterialTheme.colorScheme.onSurface,
                                     style = MaterialTheme.typography.headlineSmall
                                 )

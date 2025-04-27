@@ -9,6 +9,7 @@ import com.example.testappcompose.core.net.IngredientResponse
 interface CocktailService : Service {
     suspend fun getCocktailById(id: String): Result<Cocktail?>
     suspend fun getCocktailsBySearchName(searchName: String): Result<List<CarouselItem>>
+    suspend fun getNonAlcoholic(): Result<List<CarouselItem>>
     suspend fun getCocktailIngredient(ingredientName: String): Result<IngredientResponse>
 }
 
@@ -40,6 +41,14 @@ internal class CocktailServiceImpl internal constructor(
             } else it
         }.recoverCatching {
             getCocktailsByName(searchName)
+        }
+    }
+
+    override suspend fun getNonAlcoholic(): Result<List<CarouselItem>> {
+        return apiCall {
+            cocktailApi.getNonAlcoholic().drinks?.map {
+                CarouselItem(id = it.id, it.imageUrl, title = it.name)
+            } ?: emptyList()
         }
     }
 

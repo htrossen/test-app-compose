@@ -20,5 +20,6 @@ data class CocktailDetails(
 
 @Serializable
 data class CocktailsSearch(
-    val searchName: String
+    val searchName: String,
+    val nonAlcoholic: Boolean = false
 )

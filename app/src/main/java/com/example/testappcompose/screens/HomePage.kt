@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -48,6 +49,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testappcompose.R
@@ -61,6 +63,7 @@ import com.example.testappcompose.core.extension.titleCase
 fun HomePage(
     navToSearchResults: (String) -> Unit,
     navToFavorites: () -> Unit,
+    navToMocktails: () -> Unit,
     navToIngredientDetails: (String) -> Unit
 ) {
     val viewModel: HomeViewModel = viewModel()
@@ -180,7 +183,7 @@ fun HomePage(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(16f / 9f)
-                    .padding(start = 16.dp, bottom = 16.dp, end = 16.dp)
+                    .padding(16.dp)
                     .clip(RoundedCornerShape(6.dp)),
                 url = homeImageUrl
             )
@@ -191,6 +194,17 @@ fun HomePage(
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.headlineLarge,
             )
+            Text(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(6.dp))
+                    .clickable { navToMocktails() }
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                text = stringResource(id = R.string.search_mocktails),
+                textAlign = TextAlign.Center,
+                textDecoration = TextDecoration.Underline,
+                style = MaterialTheme.typography.titleMedium,
+            )
+
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = 16.dp),
                 color = MaterialTheme.colorScheme.primary
