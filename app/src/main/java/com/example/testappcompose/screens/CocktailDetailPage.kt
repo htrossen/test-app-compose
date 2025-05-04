@@ -37,15 +37,16 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.testappcompose.R
-import com.example.testappcompose.common.FloatingBackButton
-import com.example.testappcompose.common.GlideImageWrapper
-import com.example.testappcompose.common.LoadingState
-import com.example.testappcompose.common.ProblemState
-import com.example.testappcompose.common.TextBodyMedium
-import com.example.testappcompose.common.TextBodySmall
-import com.example.testappcompose.common.TextHeadlineLarge
-import com.example.testappcompose.common.TextHeadlineSmall
-import com.example.testappcompose.common.TextTitleMedium
+import com.libraries.ui.ViewState
+import com.libraries.ui.components.FloatingBackButton
+import com.libraries.ui.components.GlideImageWrapper
+import com.libraries.ui.components.LoadingState
+import com.libraries.ui.components.ProblemState
+import com.libraries.ui.components.TextBodyMedium
+import com.libraries.ui.components.TextBodySmall
+import com.libraries.ui.components.TextHeadlineLarge
+import com.libraries.ui.components.TextHeadlineSmall
+import com.libraries.ui.components.TextTitleMedium
 
 @Composable
 fun CocktailDetailPage(

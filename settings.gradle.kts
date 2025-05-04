@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "CocktailApp"
 include(":app")
+include(":libraries:core")
+include(":libraries:ui")

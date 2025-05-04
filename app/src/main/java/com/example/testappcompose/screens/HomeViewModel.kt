@@ -1,7 +1,8 @@
 package com.example.testappcompose.screens
 
 import androidx.lifecycle.ViewModel
-import com.example.testappcompose.common.CarouselItem
+import com.libraries.ui.ViewState
+import com.libraries.ui.components.CarouselItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 

@@ -1,7 +1,7 @@
 package com.example
 
-import com.example.testappcompose.common.CarouselItem
-import com.example.testappcompose.core.net.IngredientResponse
+import com.libraries.core.net.IngredientResponse
+import com.libraries.ui.components.CarouselItem
 
 object DataMocks {
 

@@ -18,7 +18,7 @@ import com.example.testappcompose.screens.CocktailsPage
 import com.example.testappcompose.screens.FavoritesPage
 import com.example.testappcompose.screens.HomePage
 import com.example.testappcompose.screens.IngredientDetailPage
-import com.example.testappcompose.ui.theme.TestAppComposeTheme
+import com.libraries.ui.theme.TestAppComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -62,7 +62,8 @@ class OneActivity : ComponentActivity() {
                             )
                         }
                         composable<IngredientDetails> { backStackEntry ->
-                            val ingredientName = backStackEntry.toRoute<IngredientDetails>().ingredientName
+                            val ingredientName =
+                                backStackEntry.toRoute<IngredientDetails>().ingredientName
                             IngredientDetailPage(
                                 ingredientName = ingredientName,
                                 navToCocktailDetails = { cocktailId ->

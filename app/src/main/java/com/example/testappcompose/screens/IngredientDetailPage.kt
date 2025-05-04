@@ -34,14 +34,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.testappcompose.R
-import com.example.testappcompose.common.FloatingBackButton
-import com.example.testappcompose.common.GlideImageWrapper
-import com.example.testappcompose.common.HorizontalCarousel
-import com.example.testappcompose.common.LoadingState
-import com.example.testappcompose.common.ProblemState
-import com.example.testappcompose.common.TextBodySmall
-import com.example.testappcompose.common.TextHeadlineLarge
-import com.example.testappcompose.common.TextHeadlineSmall
+import com.libraries.ui.ViewState
+import com.libraries.ui.components.FloatingBackButton
+import com.libraries.ui.components.GlideImageWrapper
+import com.libraries.ui.components.HorizontalCarousel
+import com.libraries.ui.components.LoadingState
+import com.libraries.ui.components.ProblemState
+import com.libraries.ui.components.TextBodySmall
+import com.libraries.ui.components.TextHeadlineLarge
+import com.libraries.ui.components.TextHeadlineSmall
 
 @Composable
 fun IngredientDetailPage(

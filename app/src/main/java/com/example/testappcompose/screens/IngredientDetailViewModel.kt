@@ -2,9 +2,11 @@ package com.example.testappcompose.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testappcompose.common.CarouselItem
-import com.example.testappcompose.core.extension.netDiagnostics
-import com.example.testappcompose.core.service.CocktailService
+import com.libraries.core.extension.netDiagnostics
+import com.libraries.core.service.CocktailService
+import com.libraries.ui.ViewState
+import com.libraries.ui.components.CarouselItem
+import com.libraries.ui.errorToUninitialized
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -51,14 +51,15 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testappcompose.R
-import com.example.testappcompose.common.GlideImageWrapper
-import com.example.testappcompose.common.HorizontalCarousel
-import com.example.testappcompose.common.LoadingState
-import com.example.testappcompose.common.TextBodySmall
-import com.example.testappcompose.common.TextHeadlineLarge
-import com.example.testappcompose.common.TextHeadlineSmall
-import com.example.testappcompose.common.TextTitleMedium
-import com.example.testappcompose.core.extension.titleCase
+import com.libraries.core.extension.titleCase
+import com.libraries.ui.ViewState
+import com.libraries.ui.components.GlideImageWrapper
+import com.libraries.ui.components.HorizontalCarousel
+import com.libraries.ui.components.LoadingState
+import com.libraries.ui.components.TextBodySmall
+import com.libraries.ui.components.TextHeadlineLarge
+import com.libraries.ui.components.TextHeadlineSmall
+import com.libraries.ui.components.TextTitleMedium
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -214,7 +215,9 @@ fun HomePage(
                 label = "Ingredient Carousel"
             ) { state ->
                 when (state) {
-                    ViewState.Uninitialized, ViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
+                    ViewState.Uninitialized, ViewState.Loading -> LoadingState(
+                        modifier = Modifier.fillMaxSize()
+                    )
                     is ViewState.Empty -> {} // NO-OP
                     is ViewState.Error -> {} // NO-OP
                     is ViewState.Loaded -> {

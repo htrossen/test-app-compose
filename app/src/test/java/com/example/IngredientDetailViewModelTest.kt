@@ -2,10 +2,10 @@ package com.example
 
 import androidx.compose.runtime.snapshotFlow
 import app.cash.turbine.test
-import com.example.testappcompose.core.service.CocktailService
+import com.libraries.core.service.CocktailService
 import com.example.testappcompose.screens.IngredientDetailData
 import com.example.testappcompose.screens.IngredientDetailViewModel
-import com.example.testappcompose.screens.ViewState
+import com.libraries.ui.ViewState
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers

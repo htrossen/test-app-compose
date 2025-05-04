@@ -65,6 +65,9 @@ android {
 }
 
 dependencies {
+    // Libraries
+    implementation(project(":libraries:core"))
+    implementation(project(":libraries:ui"))
 
     // AndroidX
     implementation(libs.androidx.activity)
@@ -90,14 +93,6 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    // Bumptech
-    implementation(libs.bumptech.glide)
-
-    // Flipper
-    debugImplementation(libs.facebook.flipper)
-    debugImplementation(libs.facebook.flipper.network)
-    debugImplementation(libs.facebook.soloader)
-
     // Hilt
     implementation(libs.google.hilt)
     kapt(libs.google.hilt.compiler)
@@ -105,12 +100,6 @@ dependencies {
     // Jet Brains
     implementation(libs.jetbrains.kotlin.coroutines)
     implementation(libs.jetbrains.kotlin.serialization)
-
-    // Square
-    implementation(libs.square.okhttp)
-    implementation(libs.square.retrofit)
-    implementation(libs.square.retrofit.converter.kotlinx)
-    implementation(libs.square.retrofit.converter.scalars)
 
     // Testing
     androidTestImplementation(libs.testing.androidx.espresso)

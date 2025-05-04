@@ -22,11 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.testappcompose.R
-import com.example.testappcompose.common.BackButton
-import com.example.testappcompose.common.GridView
-import com.example.testappcompose.common.LoadingState
-import com.example.testappcompose.common.ProblemState
-import com.example.testappcompose.common.TextHeadlineSmall
+import com.libraries.ui.ViewState
+import com.libraries.ui.components.BackButton
+import com.libraries.ui.components.GridView
+import com.libraries.ui.components.LoadingState
+import com.libraries.ui.components.ProblemState
+import com.libraries.ui.components.TextHeadlineSmall
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

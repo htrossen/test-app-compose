@@ -2,8 +2,9 @@ package com.example.testappcompose.screens
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testappcompose.common.CarouselItem
-import com.example.testappcompose.core.repo.PersonalizationRepo
+import com.libraries.core.repo.PersonalizationRepo
+import com.libraries.ui.ViewState
+import com.libraries.ui.components.CarouselItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +27,11 @@ class FavoritesViewModel @Inject constructor(
                     } else {
                         ViewState.Loaded(
                             it.map { favorite ->
-                                CarouselItem(favorite.id, favorite.imageUrl, favorite.name)
+                                CarouselItem(
+                                    favorite.id,
+                                    favorite.imageUrl,
+                                    favorite.name
+                                )
                             }
                         )
                     }
