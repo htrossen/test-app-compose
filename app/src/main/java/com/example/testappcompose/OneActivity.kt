@@ -3,6 +3,7 @@ package com.example.testappcompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -11,12 +12,13 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.example.testappcompose.screens.CocktailDetailPage
 import com.example.testappcompose.screens.CocktailsPage
 import com.example.testappcompose.screens.FavoritesPage
 import com.example.testappcompose.screens.HomePage
 import com.example.testappcompose.screens.IngredientDetailPage
-import com.example.testappcompose.ui.theme.TestAppComposeTheme
+import com.libraries.ui.theme.TestAppComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,6 +26,7 @@ class OneActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
+        enableEdgeToEdge()
         setContent {
             TestAppComposeTheme {
                 Surface(
@@ -31,55 +34,61 @@ class OneActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    NavHost(navController, startDestination = HOME) {
-                        composable(HOME) {
+                    NavHost(navController, startDestination = Home) {
+                        composable<Home> {
                             HomePage(
                                 navToSearchResults = { search ->
-                                    navController.navigate(route = "$COCKTAILS/$search")
+                                    navController.navigate(CocktailsSearch(search))
                                 },
                                 navToFavorites = {
-                                    navController.navigate(route = FAVORITES)
+                                    navController.navigate(Favorites)
+                                },
+                                navToMocktails = {
+                                    navController.navigate(
+                                        CocktailsSearch(searchName = "", nonAlcoholic = true)
+                                    )
                                 },
                                 navToIngredientDetails = { ingredientId ->
-                                    navController.navigate(route = "$INGREDIENT_DETAILS/$ingredientId")
+                                    navController.navigate(IngredientDetails(ingredientId))
                                 }
                             )
                         }
-                        composable(FAVORITES) {
+                        composable<Favorites> {
                             FavoritesPage(
                                 navToCocktailDetails = { cocktailId ->
-                                    navController.navigate(route = "$COCKTAIL_DETAILS/$cocktailId")
+                                    navController.navigate(CocktailDetails(cocktailId))
                                 },
                                 navBack = { navController.popBackStack() }
                             )
                         }
-                        composable("$INGREDIENT_DETAILS/{$INGREDIENT_NAME}") { backStackEntry ->
-                            val ingredientName = backStackEntry.arguments?.getString(INGREDIENT_NAME)
+                        composable<IngredientDetails> { backStackEntry ->
+                            val ingredientName =
+                                backStackEntry.toRoute<IngredientDetails>().ingredientName
                             IngredientDetailPage(
                                 ingredientName = ingredientName,
                                 navToCocktailDetails = { cocktailId ->
-                                    navController.navigate(route = "$COCKTAIL_DETAILS/$cocktailId")
+                                    navController.navigate(CocktailDetails(cocktailId))
                                 },
                                 navToViewAll = {
-                                    navController.navigate(route = "$COCKTAILS/$ingredientName")
+                                    navController.navigate(CocktailsSearch(ingredientName))
                                 },
                                 navBack = { navController.popBackStack() }
                             )
                         }
-                        composable("$COCKTAILS/{$SEARCH_NAME}") { backStackEntry ->
-                            val searchName = backStackEntry.arguments?.getString(SEARCH_NAME)
+                        composable<CocktailsSearch> { backStackEntry ->
+                            val route = backStackEntry.toRoute<CocktailsSearch>()
                             CocktailsPage(
-                                searchName = searchName,
+                                searchName = route.searchName,
+                                nonAlcoholic = route.nonAlcoholic,
                                 navToCocktailDetails = { cocktailId ->
-                                    navController.navigate(route = "$COCKTAIL_DETAILS/$cocktailId")
+                                    navController.navigate(CocktailDetails(cocktailId))
                                 },
                                 navBack = { navController.popBackStack() }
                             )
                         }
-                        composable("$COCKTAIL_DETAILS/{$COCKTAIL_ID}") { backStackEntry ->
-                            val cocktailId = backStackEntry.arguments?.getString(COCKTAIL_ID)
+                        composable<CocktailDetails> { backStackEntry ->
                             CocktailDetailPage(
-                                cocktailId = cocktailId,
+                                cocktailId = backStackEntry.toRoute<CocktailDetails>().cocktailId,
                                 navBack = { navController.popBackStack() }
                             )
                         }
@@ -87,17 +96,5 @@ class OneActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    // Routes and Params
-    companion object {
-        const val HOME = "home"
-        const val FAVORITES = "favorites"
-        const val INGREDIENT_DETAILS = "ingredientDetails"
-        const val INGREDIENT_NAME = "ingredientName"
-        const val COCKTAILS = "cocktails"
-        const val SEARCH_NAME = "searchName"
-        const val COCKTAIL_DETAILS = "cocktailDetails"
-        const val COCKTAIL_ID = "cocktailId"
     }
 }

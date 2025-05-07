@@ -1,13 +1,24 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
-    id("com.android.application") version "8.3.2" apply false
-    id("org.jetbrains.kotlin.android") version "1.8.10" apply false
-    id("com.google.dagger.hilt.android") version "2.44" apply false
-    id("org.jlleitschuh.gradle.ktlint") version "10.1.0"
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.jetbrains.kotlin.compose) apply false
+    alias(libs.plugins.jetbrains.kotlin.android) apply false
+    alias(libs.plugins.google.hilt) apply false
+    alias(libs.plugins.ktlint)
 }
 
 buildscript {
     dependencies {
-        classpath("org.jlleitschuh.gradle:ktlint-gradle:10.2.1")
+        classpath(libs.tools.ktlint)
+    }
+}
+
+subprojects {
+    apply {
+        plugin("org.jlleitschuh.gradle.ktlint")
+    }
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
     }
 }

@@ -11,20 +11,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.testappcompose.R
-import com.example.testappcompose.common.BackButton
-import com.example.testappcompose.common.GridView
-import com.example.testappcompose.common.LoadingState
-import com.example.testappcompose.common.ProblemState
+import com.libraries.ui.ViewState
+import com.libraries.ui.components.BackButton
+import com.libraries.ui.components.GridView
+import com.libraries.ui.components.LoadingState
+import com.libraries.ui.components.ProblemState
+import com.libraries.ui.components.TextHeadlineSmall
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,7 +36,7 @@ fun FavoritesPage(
 ) {
     val viewModel: FavoritesViewModel = hiltViewModel()
 
-    val viewState by viewModel.viewState
+    val viewState by viewModel.viewState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -45,10 +47,8 @@ fun FavoritesPage(
                     containerColor = MaterialTheme.colorScheme.primary,
                 ),
                 title = {
-                    Text(
-                        text = stringResource(id = R.string.favorites,),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        style = MaterialTheme.typography.headlineSmall
+                    TextHeadlineSmall(
+                        text = stringResource(id = R.string.favorites),
                     )
                 },
                 navigationIcon = {
@@ -64,7 +64,7 @@ fun FavoritesPage(
             label = "Favorites Page"
         ) { state ->
             when (state) {
-                is ViewState.Loading -> LoadingState(
+                ViewState.Uninitialized, ViewState.Loading -> LoadingState(
                     modifier = Modifier.fillMaxSize(),
                 )
                 is ViewState.Empty -> ProblemState(

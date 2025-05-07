@@ -5,57 +5,58 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.testappcompose.R
-import com.example.testappcompose.common.FloatingBackButton
-import com.example.testappcompose.common.GlideImageWrapper
-import com.example.testappcompose.common.HorizontalCarousel
-import com.example.testappcompose.common.LoadingState
-import com.example.testappcompose.common.ProblemState
-import com.example.testappcompose.core.extension.clickableWithPressedListener
+import com.libraries.ui.ViewState
+import com.libraries.ui.components.FloatingBackButton
+import com.libraries.ui.components.GlideImageWrapper
+import com.libraries.ui.components.HorizontalCarousel
+import com.libraries.ui.components.LoadingState
+import com.libraries.ui.components.ProblemState
+import com.libraries.ui.components.TextBodySmall
+import com.libraries.ui.components.TextHeadlineLarge
+import com.libraries.ui.components.TextHeadlineSmall
 
 @Composable
 fun IngredientDetailPage(
-    ingredientName: String?,
+    ingredientName: String,
     navToCocktailDetails: (String) -> Unit,
     navToViewAll: () -> Unit,
     navBack: () -> Unit
 ) {
     val viewModel: IngredientDetailViewModel = hiltViewModel()
 
-    val viewState by viewModel.viewState
+    val viewState by viewModel.viewState.collectAsState()
 
     LaunchedEffect(Unit) {
-        ingredientName?.let {
-            viewModel.loadData(ingredientName)
-        } ?: run {
-            viewModel.viewState.value = ViewState.Error("ingredientName null.")
-        }
+        viewModel.loadData(ingredientName)
     }
 
     Box {
@@ -65,19 +66,20 @@ fun IngredientDetailPage(
             label = "Ingredient Detail Page"
         ) { state ->
             when (state) {
-                is ViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
+                ViewState.Uninitialized, ViewState.Loading -> LoadingState(modifier = Modifier.fillMaxSize())
                 is ViewState.Empty -> {} // NO-OP
                 is ViewState.Error -> ProblemState(
                     modifier = Modifier.fillMaxSize(),
                     netDiagnostics = state.netDiagnostic,
-                    retry = if (ingredientName != null) {
-                        { viewModel.loadData(ingredientName) }
-                    } else null
+                    retry = { viewModel.loadData(ingredientName) }
                 )
                 is ViewState.Loaded -> {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.background)
+                            .statusBarsPadding()
+                            .navigationBarsPadding()
                             .verticalScroll(rememberScrollState())
                             .padding(bottom = 16.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -95,17 +97,12 @@ fun IngredientDetailPage(
                             )
 
                             Column(modifier = Modifier.weight(.5f)) {
-                                Text(
+                                TextHeadlineLarge(
                                     text = state.data.name,
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    fontWeight = FontWeight.Bold,
-                                    style = MaterialTheme.typography.headlineLarge
                                 )
                                 state.data.abv?.let { abv ->
-                                    Text(
+                                    TextHeadlineSmall(
                                         text = "$abv ABV",
-                                        color = MaterialTheme.colorScheme.onSurface,
-                                        style = MaterialTheme.typography.headlineSmall
                                     )
                                 }
                             }
@@ -113,42 +110,34 @@ fun IngredientDetailPage(
 
                         HorizontalDivider(color = MaterialTheme.colorScheme.primary)
 
+                        val labelModifier = if (state.data.cocktails.size > 10) {
+                            Modifier
+                                .clip(shape = RoundedCornerShape(12.dp))
+                                .clickable { navToViewAll() }
+                        } else Modifier
+
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp),
+                            modifier = labelModifier
+                                .padding(horizontal = 16.dp, vertical = 4.dp),
                             horizontalArrangement = Arrangement.spacedBy(16.dp),
-                            verticalAlignment = Alignment.Bottom
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(
-                                modifier = Modifier.weight(1f),
+                            TextHeadlineSmall(
                                 text = stringResource(
                                     id = R.string.type_cocktails,
-                                    ingredientName.orEmpty()
+                                    ingredientName
                                 ),
-                                style = MaterialTheme.typography.headlineSmall,
                             )
 
                             if (state.data.cocktails.size > 10) {
-                                var pressed by remember { mutableStateOf(false) }
-                                val color = if (pressed) {
-                                    MaterialTheme.colorScheme.tertiary
-                                } else MaterialTheme.colorScheme.primary
-
-                                Text(
-                                    modifier = Modifier
-                                        .clickableWithPressedListener(
-                                            pressChanged = { pressed = it },
-                                            onClick = navToViewAll
-                                        ),
-                                    text = stringResource(id = R.string.view_all),
-                                    color = color,
-                                    fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.headlineSmall,
+                                Icon(
+                                    painter = painterResource(id = R.drawable.arrow_forward),
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                    contentDescription = stringResource(id = R.string.view_all)
                                 )
                             }
                         }
+
                         HorizontalCarousel(
                             imageModifier = Modifier
                                 .background(MaterialTheme.colorScheme.surface)
@@ -158,18 +147,15 @@ fun IngredientDetailPage(
                         )
 
                         state.data.description?.let { description ->
-                            Text(
+                            TextHeadlineSmall(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                                 text = stringResource(id = R.string.what_is, state.data.name),
                                 textAlign = TextAlign.Center,
-                                style = MaterialTheme.typography.headlineSmall,
                             )
 
-                            Text(
+                            TextBodySmall(
                                 modifier = Modifier.padding(horizontal = 16.dp),
                                 text = description,
-                                fontWeight = FontWeight.Bold,
-                                style = MaterialTheme.typography.bodySmall,
                             )
                         }
                     }

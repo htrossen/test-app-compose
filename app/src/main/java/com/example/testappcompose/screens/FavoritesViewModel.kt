@@ -1,11 +1,13 @@
 package com.example.testappcompose.screens
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testappcompose.common.CarouselItem
-import com.example.testappcompose.core.repo.PersonalizationRepo
+import com.libraries.core.repo.PersonalizationRepo
+import com.libraries.ui.ViewState
+import com.libraries.ui.components.CarouselItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -13,20 +15,27 @@ import javax.inject.Inject
 class FavoritesViewModel @Inject constructor(
     private val personalizationRepo: PersonalizationRepo
 ) : ViewModel() {
-    val viewState = mutableStateOf<ViewState<List<CarouselItem>>>(ViewState.Loading)
+    private var _viewState = MutableStateFlow<ViewState<List<CarouselItem>>>(ViewState.Loading)
+    val viewState: StateFlow<ViewState<List<CarouselItem>>> = _viewState
 
     init {
         viewModelScope.launch {
             personalizationRepo.getFavorites().collect {
-                if (it.isEmpty()) {
-                    viewState.value = ViewState.Empty
-                } else {
-                    viewState.value = ViewState.Loaded(
-                        it.map { favorite ->
-                            CarouselItem(favorite.id, favorite.imageUrl, favorite.name)
-                        }
-                    )
-                }
+                _viewState.tryEmit(
+                    if (it.isEmpty()) {
+                        ViewState.Empty
+                    } else {
+                        ViewState.Loaded(
+                            it.map { favorite ->
+                                CarouselItem(
+                                    favorite.id,
+                                    favorite.imageUrl,
+                                    favorite.name
+                                )
+                            }
+                        )
+                    }
+                )
             }
         }
     }
