@@ -7,7 +7,7 @@ import com.libraries.core.net.IngredientResponse
 import com.libraries.ui.components.CarouselItem
 
 interface CocktailService : Service {
-    suspend fun getCocktailById(id: String): Result<Cocktail?>
+    suspend fun getCocktailById(id: String): Result<Cocktail>
     suspend fun getCocktailsBySearchName(searchName: String): Result<List<CarouselItem>>
     suspend fun getNonAlcoholic(): Result<List<CarouselItem>>
     suspend fun getCocktailIngredient(ingredientName: String): Result<IngredientResponse>
@@ -16,7 +16,7 @@ interface CocktailService : Service {
 internal class CocktailServiceImpl internal constructor(
     private val cocktailApi: CocktailApi
 ) : CocktailService {
-    override suspend fun getCocktailById(id: String): Result<Cocktail?> {
+    override suspend fun getCocktailById(id: String): Result<Cocktail> {
         return apiCall {
             cocktailApi.getCocktailById(id).drinks.firstOrNull()?.let {
                 Cocktail(
@@ -27,7 +27,9 @@ internal class CocktailServiceImpl internal constructor(
                     ingredients = it.toIngredients()
                 )
             }
-        }
+        }.getOrNull()?.let {
+            Result.success(it)
+        } ?: Result.failure(Throwable("Cocktail info for $id was null."))
     }
 
     override suspend fun getCocktailsBySearchName(searchName: String): Result<List<CarouselItem>> {
@@ -41,28 +43,34 @@ internal class CocktailServiceImpl internal constructor(
             } else it
         }.recoverCatching {
             getCocktailsByName(searchName)
-        }
+        }.getOrNull()?.let {
+            Result.success(it)
+        } ?: Result.failure(Throwable("Cocktails list for $searchName was empty."))
     }
 
     override suspend fun getNonAlcoholic(): Result<List<CarouselItem>> {
         return apiCall {
             cocktailApi.getNonAlcoholic().drinks?.map {
                 CarouselItem(id = it.id, it.imageUrl, title = it.name)
-            } ?: emptyList()
-        }
+            }?.takeIf { it.isNotEmpty() }
+        }.getOrNull()?.let {
+            Result.success(it)
+        } ?: Result.failure(Throwable("Non-Alcoholic list was empty."))
     }
 
-    private suspend fun getCocktailsByName(searchName: String): List<CarouselItem> {
+    private suspend fun getCocktailsByName(searchName: String): List<CarouselItem>? {
         return apiCall {
             cocktailApi.getCocktailsByName(searchName).drinks?.map {
                 CarouselItem(id = it.id, it.imageUrl, title = it.name)
-            } ?: emptyList()
-        }.getOrDefault(emptyList())
+            }?.takeIf { it.isNotEmpty() }
+        }.getOrNull()
     }
 
     override suspend fun getCocktailIngredient(ingredientName: String): Result<IngredientResponse> {
         return apiCall {
-            cocktailApi.getIngredients(ingredientName).ingredients.first()
-        }
+            cocktailApi.getIngredients(ingredientName).ingredients.firstOrNull()
+        }.getOrNull()?.let {
+            Result.success(it)
+        } ?: Result.failure(Throwable("Ingredient $ingredientName not found."))
     }
 }

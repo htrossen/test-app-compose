@@ -44,6 +44,8 @@ testing-mockk = "1.13.3"
 testing-turbine = "0.12.1"
 
 tools-ktlint = "10.2.1"
+junit = "4.13.2"
+material = "1.10.0"
 
 [libraries]
 androidx-activity = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity"}
@@ -96,6 +98,8 @@ testing-mockk = { module = "io.mockk:mockk", version.ref = "testing-mockk" }
 testing-turbine = { module = "app.cash.turbine:turbine", version.ref = "testing-turbine" }
 
 tools-ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "tools-ktlint"}
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-application" }

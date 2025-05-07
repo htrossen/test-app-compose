@@ -1,4 +1,4 @@
-package com.example
+package com.example.testappcompose
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -20,6 +20,7 @@ class HomeScreenTest {
             HomePage(
                 navToSearchResults = {},
                 navToFavorites = {},
+                navToMocktails = {},
                 navToIngredientDetails = {}
             )
         }

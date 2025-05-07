@@ -39,6 +39,7 @@ android {
 dependencies {
     // Libraries
     implementation(project(":libraries:ui"))
+    testImplementation(project(":libraries:testing"))
 
     // Androidx
     implementation(libs.androidx.appcompat)
@@ -68,4 +69,11 @@ dependencies {
     implementation(libs.square.retrofit)
     implementation(libs.square.retrofit.converter.kotlinx)
     implementation(libs.square.retrofit.converter.scalars)
+
+    // Testing
+    testImplementation(libs.testing.jetbrains.coroutines)
+    testImplementation(libs.testing.junit.engine)
+    testImplementation(libs.testing.junit.params)
+    testImplementation(libs.testing.mockk)
+    testImplementation(libs.testing.turbine)
 }

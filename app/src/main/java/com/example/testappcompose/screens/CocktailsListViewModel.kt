@@ -37,11 +37,7 @@ class CocktailsListViewModel @Inject constructor(
             if (nonAlcoholic) {
                 cocktailService.getNonAlcoholic().onSuccess {
                     _viewState.tryEmit(
-                        if (it.isNotEmpty()) {
-                            ViewState.Loaded(data = it)
-                        } else {
-                            ViewState.Error("Non-Alcoholic list was empty.")
-                        }
+                        ViewState.Loaded(data = it)
                     )
                 }.onFailure {
                     _viewState.tryEmit(ViewState.Error(it.netDiagnostics()))
@@ -49,11 +45,7 @@ class CocktailsListViewModel @Inject constructor(
             } else {
                 cocktailService.getCocktailsBySearchName(searchName).onSuccess {
                     _viewState.tryEmit(
-                        if (it.isNotEmpty()) {
-                            ViewState.Loaded(data = it)
-                        } else {
-                            ViewState.Error("Cocktails list for $searchName was empty.")
-                        }
+                        ViewState.Loaded(data = it)
                     )
                 }.onFailure {
                     _viewState.tryEmit(ViewState.Error(it.netDiagnostics()))

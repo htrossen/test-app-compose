@@ -28,8 +28,8 @@ class IngredientDetailViewModel @Inject constructor(
         loadDataIfNeeded(ingredientName)
     }
 
-    private fun loadDataIfNeeded(ingredientName: String) = viewModelScope.launch {
-        if (_viewState.value !is ViewState.Uninitialized) return@launch
+    private fun loadDataIfNeeded(ingredientName: String) {
+        if (_viewState.value !is ViewState.Uninitialized) return
 
         _viewState.update { ViewState.Loading }
 
@@ -42,41 +42,40 @@ class IngredientDetailViewModel @Inject constructor(
 
         // On Error
         var diagnostics: String? = null
-
         viewModelScope.launch {
-            launch {
-                cocktailService.getCocktailIngredient(ingredientName).onSuccess {
-                    abv = it.abv
-                    description = it.description
-                }.onFailure {
-                    diagnostics += it.netDiagnostics()
+            viewModelScope.launch {
+                launch {
+                    cocktailService.getCocktailIngredient(ingredientName).onSuccess {
+                        abv = it.abv
+                        description = it.description
+                    }.onFailure {
+                        diagnostics += it.netDiagnostics()
+                    }
                 }
-            }
-            launch {
-                cocktailService.getCocktailsBySearchName(ingredientName).onSuccess {
-                    if (it.isNotEmpty()) {
+                launch {
+                    cocktailService.getCocktailsBySearchName(ingredientName).onSuccess {
                         cocktails = it
-                    } else diagnostics += "Cocktails list for $ingredientName was empty."
-                }.onFailure {
-                    diagnostics += it.netDiagnostics()
+                    }.onFailure {
+                        diagnostics += it.netDiagnostics()
+                    }
                 }
-            }
-        }.join()
+            }.join()
 
-        cocktails?.let {
-            _viewState.tryEmit(
-                ViewState.Loaded(
-                    IngredientDetailData(
-                        name = ingredientName,
-                        image = "https://www.thecocktaildb.com/images/ingredients/$ingredientName.png",
-                        abv = abv,
-                        description = description,
-                        cocktails = it
+            cocktails?.let {
+                _viewState.tryEmit(
+                    ViewState.Loaded(
+                        IngredientDetailData(
+                            name = ingredientName,
+                            image = "https://www.thecocktaildb.com/images/ingredients/$ingredientName.png",
+                            abv = abv,
+                            description = description,
+                            cocktails = it
+                        )
                     )
                 )
-            )
-        } ?: run {
-            _viewState.tryEmit(ViewState.Error(diagnostics.orEmpty()))
+            } ?: run {
+                _viewState.tryEmit(ViewState.Error(diagnostics.orEmpty()))
+            }
         }
     }
 }

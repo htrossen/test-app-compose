@@ -1,4 +1,4 @@
-package com.example
+package com.example.testappcompose
 
 import androidx.compose.runtime.snapshotFlow
 import app.cash.turbine.test

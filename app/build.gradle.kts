@@ -68,6 +68,7 @@ dependencies {
     // Libraries
     implementation(project(":libraries:core"))
     implementation(project(":libraries:ui"))
+    testImplementation(project(":libraries:testing"))
 
     // AndroidX
     implementation(libs.androidx.activity)

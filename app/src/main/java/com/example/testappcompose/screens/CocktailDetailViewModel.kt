@@ -42,11 +42,7 @@ class CocktailDetailViewModel @Inject constructor(
         viewModelScope.launch {
             cocktailService.getCocktailById(id).onSuccess {
                 _viewState.tryEmit(
-                    if (it != null) {
-                        ViewState.Loaded(data = it)
-                    } else {
-                        ViewState.Error("Cocktail info for $id was null.")
-                    }
+                    ViewState.Loaded(data = it)
                 )
             }.onFailure {
                 _viewState.tryEmit(ViewState.Error(it.netDiagnostics()))
